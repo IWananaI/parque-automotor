@@ -2,9 +2,33 @@
 
 {% block content %}
 <div class="right_col" role="main">
-    <h1>Eliminar usuarios</h1>
+    <h1>Eliminar usuario</h1>
+    <form action="eliminar" method="POST">
+
+        {% csrf_token %}
+
+        <div class="form-group row">
+          <label for="id_per" class="col-4 col-form-label">Cédula</label> 
+          <div class="col-8">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <i class="fa fa-id-badge"></i>
+                </div>
+              </div> 
+              <select>
+                {% for i in usuarios %}
+                    <option value="{{i.id_per}}"> {{i.id_per}} </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-4 col-8">
+              <button name="submit" type="submit" class="btn btn-danger"> <i class="fa fa-user-trash"></i>  Eliminar usuario</button>
+            </div>
+        </div>
+    </form>
 </div>
-
-
-
 {% endblock %}

@@ -2,48 +2,42 @@
 
 {% block content %}
 <div class="right_col" role="main">
-    <h1>Lista de usuarios</h1>
-    <div class="table-responsive">
-        <table class="table table-striped border-info">
-          <thead>
-            <tr>
-              <th scope="col">Cédula</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Apellido</th>
-              <th scope="col">Teléfono</th>
-              <th scope="col">Dirección</th>
-              <th scope="col">Categoría de licencia</th>
-              <th scope="col">Vigencia de licencia</th>
-              <th scope="col">Dependencia</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            {% for i in Usuarios %}
-            <tr>
-              <th scope="row">{{ i.id_per }}</th>
-              <td>{{ i.nom_per }}</td>
-              <td>{{ i.ape_per }}</td>
-              <td>{{ i.tel_per }}</td>
-              <td>{{ i.dir_per }}</td>
-              <td>{{ i.cat_per }}</td>
-              <td>{{ i.vig_per }}</td>
-              <td>{{ i.dep_per }}</td>
-            </tr>
-            {% endfor %}
-            <th scope="row">1</th>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5</td>
-            <td>4</td>
-            <td>3</td>
-            <td>2</td>
-          </tbody>
-      
-        </table>
-      </div>
+  <h1>Lista de usuarios</h1>
+  <div class="table-responsive">
     
+    <table class="table ">
+      <thead>
+        <tr>
+          <th scope="col">Cédula</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">Teléfono</th>
+          <th scope="col">Dirección</th>
+          <th scope="col">Categoría de licencia</th>
+          <th scope="col">Vigencia de licencia</th>
+          <th scope="col">Dependencia</th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for u in usuarios %}
+          <tr>
+            <th scope="row">{{ u.id_per }}</th>
+            <td>{{ u.nom_per }}</td>
+            <td>{{ u.ape_per }}</td>
+            <td>{{ u.tel_per }}</td>
+            <td>{{ u.dir_per }}</td>
+            <td>{{ u.cat_per }}</td>
+            <td>{{ u.vig_per }}</td>
+            <td>{{ u.dep_per }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+
 </div>
 
 {% endblock %}

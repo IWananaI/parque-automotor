@@ -10,7 +10,7 @@ class Usuarios(models.Model):
     tel_per = models.IntegerField(null=False)
     dir_per = models.CharField(max_length=30,null=False)
     cat_per = models.CharField(max_length=2,null=False)
-    vig_per = models.DateField(null=False)
+    vig_per = models.DateField(null=True)
     dep_per = models.IntegerField(null=False)
     class Meta:
         db_table = 'usuarios'
