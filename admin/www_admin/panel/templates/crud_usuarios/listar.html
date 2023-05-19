@@ -1,8 +1,14 @@
 {% extends '../index_master.html' %}
-
+{% block title %}
+Lista de Usuarios
+{% endblock %}
 {% block content %}
 <div class="right_col" role="main">
   <h1>Lista de usuarios</h1>
+  <div>
+    <input type="text" name="keyword" id="keyword" class="form-control">
+    
+  </div>
   <div class="table-responsive">
     
     <table class="table ">
@@ -16,6 +22,7 @@
           <th scope="col">Categoría de licencia</th>
           <th scope="col">Vigencia de licencia</th>
           <th scope="col">Dependencia</th>
+          <th scope="col">Acción</th>
 
         </tr>
       </thead>
@@ -31,6 +38,10 @@
             <td>{{ u.cat_per }}</td>
             <td>{{ u.vig_per }}</td>
             <td>{{ u.dep_per }}</td>
+            <td>
+              <button class="btn btn-warning" onclick="window.location.href='actualizar/{{ u.id_per }}'"><i class="fa fa-refresh"></i></i></button>
+              <button class="btn btn-danger" onclick="window.location.href='eliminar/{{ u.id_per }}'"><i class="fa fa-trash"></i></i></button>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
