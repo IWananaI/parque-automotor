@@ -5,10 +5,16 @@ Lista de Usuarios
 {% block content %}
 <div class="right_col" role="main">
   <h1>Lista de usuarios</h1>
-  <div>
-    <input type="text" name="keyword" id="keyword" class="form-control">
-    
-  </div>
+  <form action="" method="POST" style="float: left">
+    <div style="display: inline-block;">
+      <form action="" method="POST">
+        {% csrf_token %}
+        <input type="text" name="keyword" id="keyword" class="form-control" style="width: 150px; display: inline-block;">
+        <button type="submit" name="search"class="btn btn-success"><i class="fa fa-search"></i></button>
+      
+    </div>
+  </form>
+  <button name="agregar" class="btn btn-primary" onclick="window.location.href='agregar'" style="display: inline-block;"><i class="fa fa-plus"></i>  Nuevo usuario</button>
   <div class="table-responsive">
     
     <table class="table ">

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="right_col" role="main">
     <h1>Actualizar usuario</h1>
-    <form action="actualizar" method="POST">
+    <form action="" method="POST">
 
         {% csrf_token %}
 
@@ -16,9 +16,9 @@
                   <i class="fa fa-id-badge"></i>
                 </div>
               </div> 
-              <select>
+              <select id="id" name="id" class="form-control">
                 {% for i in usuarios %}
-                    <option value="{{i.id_per}}"> {{i.id_per}} </option>
+                    <option value="{{i.id_per}}" {% if i.id_per == usuario.id_per %} selected {% endif %}> {{i.id_per}} </option>
                 {% endfor %}
               </select>
             </div>
@@ -33,7 +33,7 @@
                   <i class="fa fa-lock"></i>
                 </div>
               </div> 
-              <input id="pas_per" name="pas_per" type="password" required="required" class="form-control">
+              <input id="pas_per" name="pas_per" type="password" required="required" class="form-control" value="{{ usuario.pas_per }}">
             </div>
           </div>
         </div>
@@ -46,7 +46,7 @@
                   <i class="fa fa-address-book"></i>
                 </div>
               </div> 
-              <input id="nom_per" name="nom_per" type="text" class="form-control" required="required">
+              <input id="nom_per" name="nom_per" type="text" class="form-control" required="required" value="{{ usuario.nom_per }}">
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
                   <i class="fa fa-address-book-o"></i>
                 </div>
               </div> 
-              <input id="ape_per" name="ape_per" type="text" class="form-control" required="required">
+              <input id="ape_per" name="ape_per" type="text" class="form-control" required="required" value="{{ usuario.ape_per }}">
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@
                   <i class="fa fa-phone"></i>
                 </div>
               </div> 
-              <input id="tel_per" name="tel_per" type="number" class="form-control" required="required">
+              <input id="tel_per" name="tel_per" type="number" class="form-control" required="required" value="{{ usuario.tel_per }}">
             </div>
           </div>
         </div>
@@ -85,7 +85,7 @@
                   <i class="fa fa-location-arrow"></i>
                 </div>
               </div> 
-              <input id="dir_per" name="dir_per" type="text" class="form-control" required="required">
+              <input id="dir_per" name="dir_per" type="text" class="form-control" required="required" value="{{ usuario.dir_per }}">
             </div>
           </div>
         </div>
@@ -153,6 +153,7 @@
         </div> 
         <div class="form-group row">
           <div class="offset-4 col-8">
+            <button name="back" class="btn btn-primary" onclick="history.back(); return false;"> <i class="fa fa-arrow-left"></i>  Volver</button>
             <button name="submit" type="submit" class="btn btn-warning"> <i class="fa fa-refresh"></i>  Actualizar usuario</button>
           </div>
         </div>
