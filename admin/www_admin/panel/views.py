@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Usuarios
+from .models import Usuarios, Dependencias
 from django.db.models import Q
 # Create your views here.
 
@@ -77,13 +77,13 @@ def actualizar(request, idUsuario):
                 return redirect('listar')
         else:
             users = Usuarios.objects.all()
-            user = Usuarios.objects.get(id_per=idUsuario)
-            datos = { 'usuarios' : users , 'usuario' : user}
+            user = Usuarios.objects.get( id_per=idUsuario )
+            datos = { 'usuarios' : users , 'usuario' : user }
             return render(request, "crud_usuarios/actualizar.html", datos)
     except Usuarios.DoesNotExist:
         users = Usuarios.objects.all()
         user = None
-        datos = { 'usuarios' : users , 'usuario' : user}
+        datos = { 'usuarios' : users , 'usuario' : user }
         return render(request, "crud_usuarios/actualizar.html", datos)
 
 
@@ -105,3 +105,77 @@ def eliminar(request, idUsuario):
         user = None
         datos = { 'usuarios' : users , 'usuario' : user}
         return render(request, "crud_usuarios/eliminar.html", datos)
+
+def listardep(request):
+
+    if request.method == 'POST':
+        busqueda = request.POST.get('keyword')
+        lista = Dependencias.objects.all()
+
+        if busqueda is not None:
+            res_busqueda = lista.filter(
+            Q(id_dep__icontains=busqueda) |
+            Q(nom_dep__icontains=busqueda) 
+            )
+            datos = {'dependencias': res_busqueda}
+            return render(request, "crud_dependencias/listar.html", datos)
+        else:
+            datos = { 'dependencias' : lista }
+            return render(request, "crud_dependencias/listar.html", datos)
+    else:
+        deps = Dependencias.objects.order_by('-id_dep')[:10]
+        datos = { 'dependencias' : deps }
+        return render(request, "crud_dependencias/listar.html", datos)
+
+def agregardep(request):
+    if request.method == 'POST':
+        if request.POST.get('nom_dep'):
+            
+            dep = Dependencias()
+            dep.nom_dep = request.POST.get('nom_dep')
+            dep.save()
+            return redirect('listardep')
+    else:
+        deps = Dependencias.objects.all()
+        datos = {'dependencias' : deps}
+        return render(request,"crud_dependencias/agregar.html",datos)
+
+def actualizardep(request, idDependencia):
+    try:
+        if request.method == 'POST':
+            if request.POST.get('nom_dep'):
+                dep = Dependencias()
+                dep.id_dep = request.POST.get('id')
+                dep.nom_dep = request.POST.get('nom_dep')
+                dep.save()
+                return redirect('listardep')
+        else:
+            deps = Dependencias.objects.all()
+            dep = Dependencias.objects.get( id_dep=idDependencia )
+            datos = { 'dependencias' : deps , 'dependencia' : dep }
+            return render(request, "crud_dependencias/actualizar.html", datos)
+    except Dependencias.DoesNotExist:
+        deps = Dependencias.objects.all()
+        dep = None
+        datos = { 'dependencias' : deps , 'dependencia' : dep }
+        return render(request, "crud_dependencias/actualizar.html", datos)
+
+
+def eliminardep(request, idDependencia):
+    try:
+        if request.method=='POST':
+            if request.POST.get('id_dep'):
+                id_a_borrar= request.POST.get('id_dep')
+                tupla=Dependencias.objects.get(id_dep = id_a_borrar)
+                tupla.delete()
+                return redirect('listardep')
+        else:
+            deps = Dependencias.objects.all()
+            dep = Dependencias.objects.get( id_dep=idDependencia )
+            datos = { 'dependencias' : deps , 'dependencia' : dep }
+            return render(request, "crud_dependencias/eliminar.html", datos)
+    except Dependencias.DoesNotExist:
+        deps = Dependencias.objects.all()
+        dep = None
+        datos = { 'dependencias' : deps , 'dependencia' : dep }
+        return render(request, "crud_dependencias/eliminar.html", datos)

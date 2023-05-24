@@ -35,20 +35,23 @@ Lista de Usuarios
       <tbody>
 
         {% for u in usuarios %}
-          <tr>
-            <th scope="row">{{ u.id_per }}</th>
-            <td>{{ u.nom_per }}</td>
-            <td>{{ u.ape_per }}</td>
-            <td>{{ u.tel_per }}</td>
-            <td>{{ u.dir_per }}</td>
-            <td>{{ u.cat_per }}</td>
-            <td>{{ u.vig_per }}</td>
-            <td>{{ u.dep_per }}</td>
-            <td>
-              <button class="btn btn-warning" onclick="window.location.href='actualizar/{{ u.id_per }}'"><i class="fa fa-refresh"></i></i></button>
-              <button class="btn btn-danger" onclick="window.location.href='eliminar/{{ u.id_per }}'"><i class="fa fa-trash"></i></i></button>
-            </td>
-          </tr>
+          
+            <tr>
+              <th scope="row">{{ u.id_per }}</th>
+              <td>{{ u.nom_per }}</td>
+              <td>{{ u.ape_per }}</td>
+              <td>{{ u.tel_per }}</td>
+              <td>{{ u.dir_per }}</td>
+              <td>{{ u.cat_per }}</td>
+              <td>{{ u.vig_per }}</td>
+              <td>{{ u.dep_per.nom_dep }}</td>
+
+              <td>
+                <button class="btn btn-warning" onclick="window.location.href='actualizar/{{ u.id_per }}'"><i class="fa fa-refresh"></i></i></button>
+                <button class="btn btn-danger" onclick="window.location.href='eliminar/{{ u.id_per }}'"><i class="fa fa-trash"></i></i></button>
+              </td>
+            </tr>
+          
         {% endfor %}
       </tbody>
 
