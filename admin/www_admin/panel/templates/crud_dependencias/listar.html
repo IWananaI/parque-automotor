@@ -5,6 +5,7 @@ Lista de Usuarios
 {% block content %}
 <div class="right_col" role="main">
   <h1>Lista de usuarios</h1>
+  
   <form action="" method="POST" style="float: left">
     <div style="display: inline-block;">
       <form action="" method="POST">
@@ -34,7 +35,7 @@ Lista de Usuarios
             <td>{{ u.nom_dep }}</td>
             <td>
               <button class="btn btn-warning" onclick="window.location.href='actualizardep/{{ u.id_dep }}'"><i class="fa fa-refresh"></i></i></button>
-              <button class="btn btn-danger" onclick="window.location.href='eliminardep/{{ u.nom_dep }}'"><i class="fa fa-trash"></i></i></button>
+              <button class="btn btn-danger" onclick="window.location.href='eliminardep/{{ u.id_dep }}'"><i class="fa fa-trash"></i></i></button>
             </td>
           </tr>
         {% endfor %}

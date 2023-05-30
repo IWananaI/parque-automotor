@@ -14,4 +14,6 @@ urlpatterns = [
     path('agregardep', views.agregardep, name="agregardep"),
     path('actualizardep/<int:idDependencia>', views.actualizardep, name="actualizardep"),
     path('eliminardep/<int:idDependencia>', views.eliminardep, name="eliminardep"),
+    path('listarveh', views.listarveh, name="listarveh"),
+    path('agregarveh', views.agregarveh, name="agregarveh"),
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Usuarios, Dependencias
+from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica
 from django.db.models import Q
 # Create your views here.
 
@@ -51,12 +51,13 @@ def agregar(request):
             user.dir_per = request.POST.get('dir_per')
             user.cat_per = request.POST.get('cat_per')
             user.vig_per = request.POST.get('vig_per')
-            user.dep_per = request.POST.get('dep_per')
+            user.dep_per_id = request.POST.get('dep_per')
             user.save()
             return redirect('listar')
     else:
         users = Usuarios.objects.all()
-        datos = {'usuarios' : users}
+        deps = Dependencias.objects.all()
+        datos = {'usuarios' : users, 'dependencias': deps}
         return render(request,"crud_usuarios/agregar.html",datos)
 
 def actualizar(request, idUsuario):
@@ -164,8 +165,8 @@ def actualizardep(request, idDependencia):
 def eliminardep(request, idDependencia):
     try:
         if request.method=='POST':
-            if request.POST.get('id_dep'):
-                id_a_borrar= request.POST.get('id_dep')
+            if request.POST.get('id'):
+                id_a_borrar= request.POST.get('id')
                 tupla=Dependencias.objects.get(id_dep = id_a_borrar)
                 tupla.delete()
                 return redirect('listardep')
@@ -178,4 +179,69 @@ def eliminardep(request, idDependencia):
         deps = Dependencias.objects.all()
         dep = None
         datos = { 'dependencias' : deps , 'dependencia' : dep }
-        return render(request, "crud_dependencias/eliminar.html", datos)
+        return render(request, "crud_dependencias/eliminar.html", datos)    
+    
+def listarveh(request):
+
+    if request.method == 'POST':
+        busqueda = request.POST.get('keyword')
+        lista = Vehiculos.objects.all()
+
+        if busqueda is not None:
+            res_busqueda = lista.filter(
+            Q(pla_veh__icontains=busqueda) |
+            Q(num_lic_veh__icontains=busqueda) |
+            Q(cla_veh__icontains=busqueda) |
+            Q(mar_veh__icontains=busqueda) |
+            Q(mod_veh__icontains=busqueda) |
+            Q(col_veh__icontains=busqueda) |
+            Q(num_mot_veh__icontains=busqueda) |
+            Q(num_cha_veh__icontains=busqueda) |
+            Q(cil_veh__icontains=busqueda) |
+            Q(tip_car_veh__icontains=busqueda) |
+            Q(est_veh__icontains=busqueda) |
+            Q(obs_veh__icontains=busqueda) |
+            Q(dep_veh__icontains=busqueda) |
+            Q(per_asi_veh__icontains=busqueda) |
+            Q(soa_veh__icontains=busqueda) |
+            Q(tec_veh__icontains=busqueda) 
+            )
+            datos = {'vehiculos': res_busqueda}
+            return render(request, "crud_vehiculos/listar.html", datos)
+        else:
+            datos = { 'vehiculos' : lista }
+            return render(request, "crud_vehiculos/listar.html", datos)
+    else:
+        deps = Dependencias.objects.order_by('-id_dep')[:10]
+        datos = { 'vehiculos' : deps }
+        return render(request, "crud_vehiculos/listar.html", datos)
+def agregarveh(request):
+    if request.method == 'POST':
+        if request.POST.get('num_lic_veh') and request.POST.get('num_lic_veh') and request.POST.get('cla_veh') and request.POST.get('mar_veh') and request.POST.get('mod_veh') and request.POST.get('col_veh') and request.POST.get('num_mot_veh') and request.POST.get('num_cha_veh') and request.POST.get('cil_veh') and request.POST.get('tip_car_veh') and request.POST.get('est_veh') and request.POST.get('obs_veh') :
+            print("Hola mundo, si entro")
+            veh = Vehiculos()
+            veh.pla_veh = request.POST.get('pla_veh')
+            veh.num_lic_veh = request.POST.get('num_lic_veh')
+            veh.cla_veh = request.POST.get('cla_veh')
+            veh.mar_veh = request.POST.get('mar_veh')
+            veh.mod_veh = request.POST.get('mod_veh')
+            veh.col_veh = request.POST.get('col_veh')
+            veh.num_mot_veh = request.POST.get('num_mot_veh')
+            veh.num_cha_veh = request.POST.get('num_cha_veh')
+            veh.cil_veh = request.POST.get('cil_veh')
+            veh.tip_car_veh = request.POST.get('tip_car_veh')
+            veh.est_veh = request.POST.get('est_veh')
+            veh.obs_veh = request.POST.get('obs_veh')
+            veh.dep_veh_id = request.POST.get('dep_veh')
+            veh.soa_veh_id = request.POST.get('soa_veh')
+            veh.tec_veh_id = request.POST.get('tec_veh')
+            veh.save()
+            return redirect('listarveh')
+    else:
+        vehs = Vehiculos.objects.all()
+        deps = Dependencias.objects.all()
+        soats = Soat.objects.all()
+        tecs = Tecnicomecanica.objects.all()
+        
+        datos = {'vehiculos' : vehs, 'dependencias' : deps,'soats': soats, 'tecnos': tecs}
+        return render(request,"crud_vehiculos/agregar.html",datos)

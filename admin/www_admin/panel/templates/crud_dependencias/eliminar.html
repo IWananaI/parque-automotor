@@ -16,9 +16,9 @@
                   <i class="fa fa-id-badge"></i>
                 </div>
               </div> 
-              <select id="id_per" name="id_per">
+              <select id="id" name="id">
                 {% for i in dependencias %}
-                  <option value="{{i.id_dep}}" {% if i.id_dep == dependencia.id_dep %} selected {% endif %}> {{i.id_dep}} - {{i.nom_dep}} </option>
+                    <option value="{{i.id_dep}}" {% if i.id_dep == dependencia.id_dep %} selected {% endif %}> {{i.id_dep}} - {{i.nom_dep}} </option>
                 {% endfor %}
               </select>
             </div>

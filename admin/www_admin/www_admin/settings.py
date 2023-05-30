@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'www_admin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'automotor',
+        'NAME': 'automotor2',
         'USER': 'postgres',
         'PASSWORD': '123456',
         'HOST': '127.0.0.1',
