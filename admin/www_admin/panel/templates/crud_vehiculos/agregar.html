@@ -4,7 +4,7 @@
 <div class="right_col" role="main">
     <h1>Agregar Vehiculo</h1>
 
-    <form action="agregar" method="POST">
+    <form action="agregarveh" method="POST">
         {% csrf_token %}
 
         <div class="form-group row">
@@ -137,7 +137,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="form-group row">
             <label for="dep_veh" class="col-4 col-form-label">Dependencia</label>
             <div class="col-8">
@@ -147,7 +147,7 @@
                             <i class="fa fa-building"></i>
                         </div>
                     </div>
-                    <select id="dep_per" name="dep_per" class="custom-select" required="required">
+                    <select id="dep_veh" name="dep_veh" class="custom-select" required="required">
                         <option value="null">Selecciona una opción</option>
                         {% for i in dependencias %}
                         <option value="{{i.id_dep}}"> {{i.nom_dep}} </option>
@@ -162,33 +162,20 @@
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <i class="fa fa-warning"></i>
-                        </div>
-                    </div>
-                    <input id="soa_veh" name="soa_veh" type="text" class="form-control">
-                </div>
-            </div>
-        </div>
-        <!-- <div class="form-group row">
-            <label for="dep_veh" class="col-4 col-form-label">SOAT</label>
-            <div class="col-8">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <i class="fa fa-building"></i>
+                            <i class="fa fa-calendar-check-o"></i>
                         </div>
                     </div>
                     <select id="soa_veh" name="soa_veh" class="custom-select" required="required">
                         <option value="null">Selecciona una opción</option>
                         {% for i in soats %}
-                        <option value="{{i.id_soa}}"> {{i.id_soa}} </option>
+                        <option value="{{i.id_soa}}"> {{i.id_soa}} - {{i.fec_exp_soa}} </option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
-        </div> -->
+        </div>
         <div class="form-group row">
-            <label for="tec_veh" class="col-4 col-form-label">Tecno</label>
+            <label for="tec_veh" class="col-4 col-form-label">Tecnomecánica</label>
             <div class="col-8">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -196,20 +183,25 @@
                             <i class="fa fa-gears"></i>
                         </div>
                     </div>
-                    <input id="tec_veh" name="tec_veh" type="text" class="form-control">
+                    <select id="tec_veh" name="tec_veh" class="custom-select" required="required">
+                        <option value="null">Selecciona una opción</option>
+                        {% for i in tecs %}
+                        <option value="{{i.id_tec}}"> {{i.id_tec}} - {{i.fec_exp_tec}} </option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
         </div>
         <div class="form-group row">
-            <label for="est_veh" class="col-4 col-form-label">Estado</label>
+            <label class="col-4">Estado del vehiculo</label>
             <div class="col-8">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <i class="fa fa-check-square"></i>
-                        </div>
-                    </div>
-                    <input id="est_veh" name="est_veh" type="text" required="required" class="form-control">
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input name="est_veh" id="est_veh_0" type="checkbox" class="custom-control-input" value="True">
+                    <label for="est_veh_0" class="custom-control-label">Funcionamiento</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input name="est_veh" id="est_veh_1" type="checkbox" class="custom-control-input" value="False">
+                    <label for="est_veh_1" class="custom-control-label">No Funcionamiento</label>
                 </div>
             </div>
         </div>
@@ -231,7 +223,7 @@
             <div class="offset-4 col-8">
                 <button name="back" class="btn btn-primary" onclick="history.back(); return false;"> <i
                         class="fa fa-arrow-left"></i> Volver</button>
-                <button name="submit" type="submit" class="btn btn-primary"> <i class="fa fa-user-plus"></i> Agregar
+                <button name="submit" type="submit" class="btn btn-primary"> <i class="fa fa-plus"></i> Agregar
                     Vehiculo</button>
             </div>
         </div>

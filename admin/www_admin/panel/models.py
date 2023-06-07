@@ -15,7 +15,7 @@ class Usuarios(models.Model):
     ape_per = models.CharField(max_length=30,null=False)
     tel_per = models.CharField(max_length=30,null=False)
     dir_per = models.CharField(max_length=30,null=False)
-    cat_per = models.CharField(max_length=2,null=False)
+    cat_per = models.CharField(max_length=30,null=False)
     vig_per = models.DateField(null=True)
     dep_per = models.ForeignKey(Dependencias, on_delete=models.CASCADE)
     class Meta:
@@ -23,16 +23,16 @@ class Usuarios(models.Model):
 
 
 class Soat(models.Model):
-    id_soa = models.IntegerField(primary_key=True)
-    nom_emp_soa = models.CharField(max_length=50, null=False)
+    id_soa = models.AutoField(primary_key=True)
+    nom_emp_soa = models.CharField(max_length=50, null=True)
     fec_exp_soa = models.DateField(null=True)
     fec_ven_soa = models.DateField(null=True)
     class Meta:
         db_table = 'soat'
 
 class Tecnicomecanica(models.Model):
-    id_tec = models.IntegerField(primary_key=True)
-    nom_emp_tec = models.CharField(max_length=50, null=False)
+    id_tec = models.AutoField(primary_key=True)
+    nom_emp_tec = models.CharField(max_length=50, null=True)
     fec_exp_tec = models.DateField(null=True)
     fec_ven_tec = models.DateField(null=True)
     class Meta:
@@ -51,7 +51,7 @@ class Vehiculos(models.Model):
     cil_veh = models.IntegerField(null=False)
     tip_car_veh = models.CharField(max_length=50,null=False)
     est_veh = models.BooleanField(null=False)
-    obs_veh = models.CharField(max_length=200,null=False)
+    obs_veh = models.CharField(max_length=200,null=True)
     dep_veh = models.ForeignKey(Dependencias,
                                 on_delete=models.CASCADE,
                                 blank=True)

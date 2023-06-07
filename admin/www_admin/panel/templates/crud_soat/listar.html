@@ -1,10 +1,10 @@
 {% extends '../index_master.html' %}
 {% block title %}
-Lista de Dependencias
+Lista de seguros SOAT
 {% endblock %}
 {% block content %}
 <div class="right_col" role="main">
-  <h1>Lista de Dependencias</h1>
+  <h1>Lista de Seguros</h1>
   
   <form action="" method="POST" style="float: left">
     <div style="display: inline-block;">
@@ -15,27 +15,31 @@ Lista de Dependencias
       
     </div>
   </form>
-  <button name="agregar" class="btn btn-primary" onclick="window.location.href='agregardep'" style="display: inline-block;"><i class="fa fa-plus"></i>  Nueva Dependencia</button>
+  <button name="agregarsoa" class="btn btn-primary" onclick="window.location.href='agregarsoa'" style="display: inline-block;"><i class="fa fa-plus"></i>  Nuevo SOAT</button>
   <div class="table-responsive">
     
     <table class="table ">
       <thead>
         <tr>
           <th scope="col">ID</th>
-          <th scope="col">Nombre de la dependencia</th>
+          <th scope="col">Nombre de la empresa</th>
+          <th scope="col">Fecha de expedición</th>
+          <th scope="col">Fecha de Vencimiento</th>
           <th scope="col">Acción</th>
 
         </tr>
       </thead>
       <tbody>
 
-        {% for u in dependencias %}
+        {% for u in soats %}
           <tr>
-            <th scope="row">{{ u.id_dep }}</th>
-            <td>{{ u.nom_dep }}</td>
+            <th scope="row">{{ u.id_soa }}</th>
+            <td>{{ u.nom_emp_soa }}</td>
+            <td>{{ u.fec_exp_soa }}</td>
+            <td>{{ u.fec_ven_soa }}</td>
             <td>
-              <button class="btn btn-warning" onclick="window.location.href='actualizardep/{{ u.id_dep }}'"><i class="fa fa-refresh"></i></i></button>
-              <button class="btn btn-danger" onclick="window.location.href='eliminardep/{{ u.id_dep }}'"><i class="fa fa-trash"></i></i></button>
+              <button class="btn btn-warning" onclick="window.location.href='actualizarsoa/{{ u.id_soa }}'"><i class="fa fa-refresh"></i></i></button>
+              <button class="btn btn-danger" onclick="window.location.href='eliminarsoa/{{ u.id_soa }}'"><i class="fa fa-trash"></i></i></button>
             </td>
           </tr>
         {% endfor %}
