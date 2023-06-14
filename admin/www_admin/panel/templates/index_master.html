@@ -53,16 +53,7 @@
                 <li><a href="http://localhost:8000"><i class="fa fa-home"></i> Home </a>
 
                 </li>
-                <li><a><i class="fa fa-car"></i> Vehiculos <span class="fa fa-chevron-down"></span></a>
-                  <ul class="nav child_menu">
-                    <li><a href="{% url 'listarveh' %}"><i class="fa fa-list"></i> Listar</a></li>
-                    <li><a href="{% url 'agregarveh' %}"><i class="fa fa-plus"></i> Agregar</a></li>
-                    <li><a href="/actualizarveh/n"><i class="fa fa-refresh"></i> Actualizar</a></li>
-                    <li><a href="/eliminarveh/n"><i class="fa fa-trash"></i> Eliminar</a></li>
-                  </ul>
-                </li>
-
-
+                
                 <li><a><i class="fa fa-users"></i> Usuarios <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
                     <li><a href="{% url 'listar' %}"><i class="fa fa-users"></i> Listar</a></li>
@@ -71,6 +62,25 @@
                     <li><a href="/eliminar/0"><i class="fa fa-trash"></i> Eliminar</a></li>
                   </ul>
                 </li>
+
+                <li><a><i class="fa fa-car"></i> Vehiculos <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href="{% url 'listarveh' %}"><i class="fa fa-list"></i> Listar</a></li>
+                    <li><a href="{% url 'agregarveh' %}"><i class="fa fa-plus"></i> Agregar</a></li>
+                    <li><a href="/actualizarveh/n"><i class="fa fa-refresh"></i> Actualizar</a></li>
+                    <li><a href="/eliminarveh/n"><i class="fa fa-trash"></i> Eliminar</a></li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-calendar"></i> Asignaciones <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href="{% url 'listarasi' %}"><i class="fa fa-list"></i> Listar</a></li>
+                    <li><a href="{% url 'agregarasi' %}"><i class="fa fa-plus"></i> Agregar</a></li>
+                    <li><a href="/actualizarasi/0"><i class="fa fa-refresh"></i> Actualizar</a></li>
+                    <li><a href="/eliminarasi/0"><i class="fa fa-trash"></i> Eliminar</a></li>
+                  </ul>
+                </li>
+
+                
 
                 <li><a><i class="fa fa-building"></i> Dependecias <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">

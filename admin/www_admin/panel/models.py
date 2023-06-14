@@ -76,7 +76,7 @@ class VehiculosAsignados(models.Model):
     id_veh = models.ForeignKey(Vehiculos,
                                blank=True,
                                on_delete=models.CASCADE)
-    fec_ing = models.DateTimeField(null=False)
+    fec_ing = models.DateTimeField(auto_now_add=True ,null=True)
     fec_sal = models.DateTimeField(null=True)
     obs_veh_asi = models.CharField(max_length=200)
     class Meta:

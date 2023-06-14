@@ -26,4 +26,8 @@ urlpatterns = [
     path('agregartec', views.agregartec, name="agregartec"),
     path('actualizartec/<int:idTecno>', views.actualizartec, name="actualizartec"),
     path('eliminartec/<int:idTecno>', views.eliminartec, name="eliminartec"),
+    path('listarasi', views.listarasi, name="listarasi"),
+    path('agregarasi', views.agregarasi, name="agregarasi"),
+    path('actualizarasi/<int:idAsignacion>', views.actualizarasi, name="actualizarasi"),
+    path('eliminarasi/<int:idAsignacion>', views.eliminarasi, name="eliminarasi"),
 ]

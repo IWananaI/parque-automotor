@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica
+from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica, VehiculosAsignados
 from django.db.models import Q
 from datetime import date
 # Create your views here.
@@ -468,3 +468,100 @@ def eliminartec(request, idTecno):
         tecs = Tecnicomecanica.objects.all()
         datos = {'tecs' : tecs, 'tec' : tec }
         return render(request,"crud_tecno/eliminar.html",datos)
+    
+def listarasi(request):
+
+    if request.method == 'POST':
+        busqueda = request.POST.get('keyword')
+        lista = VehiculosAsignados.objects.all()
+
+        if busqueda is not None:
+            res_busqueda = lista.filter(
+            Q(id__icontains=busqueda) |
+            Q(fec_ing__icontains=busqueda) |
+            Q(fec_sal__icontains=busqueda) |
+            Q(obs_veh_asi__icontains=busqueda)|
+            Q(id_per_id__icontains=busqueda)|
+            Q(id_veh_id__icontains=busqueda)
+            )
+            datos = {'asis': res_busqueda}
+            return render(request, "crud_asignaciones/listar.html", datos)
+        else:
+            datos = { 'asis' : lista }
+            return render(request, "crud_asignaciones/listar.html", datos)
+    else:
+        asis = VehiculosAsignados.objects.order_by('-id')[:10]
+        users = Usuarios.objects.all()
+        datos = { 'asignaciones' : asis, 'usuarios': users}
+        return render(request, "crud_asignaciones/listar.html", datos)
+
+def agregarasi(request):
+    if request.method == 'POST':
+        if request.POST.get('id_per') and request.POST.get('id_veh'):
+            
+            asi = VehiculosAsignados()
+            asi.id_per_id = request.POST.get('id_per')
+            asi.id_veh_id = request.POST.get('id_veh')
+            asi.fec_sal = request.POST.get('fec_sal')
+            asi.obs_veh_asi = request.POST.get('obs_asi')
+            asi.save()
+            return redirect('listarasi')
+    else:
+        asis = VehiculosAsignados.objects.all()
+        users = Usuarios.objects.all()
+        vehs = Vehiculos.objects.all()
+        datos = {'asis' : asis, 'usuarios': users, 'vehiculos': vehs}
+        return render(request,"crud_asignaciones/agregar.html",datos)
+
+def actualizarasi(request, idAsignacion):
+    try:
+        if request.method == 'POST':
+            if request.POST.get('id_per') and request.POST.get('id_veh'):
+                asi_id_old = request.POST.get('id')
+                asi_old = VehiculosAsignados()
+                asi_old = VehiculosAsignados.objects.get( id=asi_id_old )
+
+                asi = VehiculosAsignados()
+                asi.id = request.POST.get('id')
+                asi.id_per_id = request.POST.get('id_per')
+                asi.id_veh_id = request.POST.get('id_veh')
+                asi.fec_ing = asi_old.fec_ing
+                asi.fec_sal = request.POST.get('fec_sal')
+                asi.obs_veh_asi = request.POST.get('obs_asi')
+                asi.save()
+                return redirect('listarasi')
+        else:
+            asi = VehiculosAsignados.objects.get( id=idAsignacion )
+            asi.fec_sal = date.strftime(asi.fec_sal, "%Y-%m-%d %H:%M")
+            asis = VehiculosAsignados.objects.all()
+            users = Usuarios.objects.all()
+            vehs = Vehiculos.objects.all()
+            datos = {'asis' : asis, 'asi' : asi, 'usuarios': users, 'vehiculos': vehs}
+            return render(request,"crud_asignaciones/actualizar.html",datos)
+    except VehiculosAsignados.DoesNotExist:
+        asi = None
+        asis = VehiculosAsignados.objects.all()
+        users = Usuarios.objects.all()
+        vehs = Vehiculos.objects.all()
+        datos = {'asis' : asis, 'asi' : asi, 'usuarios': users, 'vehiculos': vehs} 
+        return render(request,"crud_asignaciones/actualizar.html",datos)
+
+
+def eliminarasi(request, idAsignacion):
+    try:
+        if request.method=='POST':
+            if request.POST.get('id'):
+                id_a_borrar= request.POST.get('id')
+                tupla=VehiculosAsignados.objects.get(id = id_a_borrar)
+                tupla.delete()
+                return redirect('listarasi')
+        else:
+            asi = VehiculosAsignados.objects.get( id=idAsignacion )
+            asis = VehiculosAsignados.objects.all()
+            datos = {'asis' : asis, 'asi' : asi }
+            return render(request,"crud_asignaciones/eliminar.html",datos)
+    except VehiculosAsignados.DoesNotExist:
+        asi = None
+        asis = VehiculosAsignados.objects.all()
+        datos = {'asis' : asis, 'asi' : asi }
+        return render(request,"crud_asignaciones/eliminar.html",datos)
