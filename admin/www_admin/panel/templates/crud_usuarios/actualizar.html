@@ -4,7 +4,15 @@
 <div class="right_col" role="main">
   <h1>Actualizar usuario</h1>
   <form action="" method="POST">
-
+    <div class="messages">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
     {% csrf_token %}
 
     <div class="form-group row">

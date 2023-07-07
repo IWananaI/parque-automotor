@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica, VehiculosAsignados
 from django.db.models import Q
 from datetime import date
+from django.contrib import messages
+
 # Create your views here.
 
 TEMPLATE_DIRS = (
@@ -30,6 +32,7 @@ def listar(request):
             Q(dep_per__icontains=busqueda) 
             )
             datos = {'usuarios': res_busqueda}
+            messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
             return render(request, "crud_usuarios/listar.html", datos)
         else:
             datos = { 'usuarios' : lista }
@@ -42,19 +45,23 @@ def listar(request):
 def agregar(request):
     if request.method == 'POST':
         if request.POST.get('pas_per') and request.POST.get('nom_per') and request.POST.get('ape_per') and request.POST.get('tel_per') and request.POST.get('dir_per') and request.POST.get('cat_per') and request.POST.get('vig_per') and request.POST.get('dep_per'):
-            
-            user = Usuarios()
-            user.id_per = request.POST.get('id_per')
-            user.pas_per = request.POST.get('pas_per')
-            user.nom_per = request.POST.get('nom_per')
-            user.ape_per = request.POST.get('ape_per')
-            user.tel_per = request.POST.get('tel_per')
-            user.dir_per = request.POST.get('dir_per')
-            user.cat_per = request.POST.get('cat_per')
-            user.vig_per = request.POST.get('vig_per')
-            user.dep_per_id = request.POST.get('dep_per')
-            user.save()
-            return redirect('listar')
+            try:
+                user = Usuarios()
+                user.id_per = request.POST.get('id_per')
+                user.pas_per = request.POST.get('pas_per')
+                user.nom_per = request.POST.get('nom_per')
+                user.ape_per = request.POST.get('ape_per')
+                user.tel_per = request.POST.get('tel_per')
+                user.dir_per = request.POST.get('dir_per')
+                user.cat_per = request.POST.get('cat_per')
+                user.vig_per = request.POST.get('vig_per')
+                user.dep_per_id = request.POST.get('dep_per')
+                user.save()
+                messages.success(request, 'El usuario {} fue agregado'.format(user.nom_per+" "+user.ape_per))
+                return redirect('listar')
+            except:
+                messages.warning(request, 'Ha ocurrido un error en los datos, intentalo nuevamente por favor')
+                return redirect('agregar')
     else:
         users = Usuarios.objects.all()
         deps = Dependencias.objects.all()
@@ -76,6 +83,7 @@ def actualizar(request, idUsuario):
                 user.vig_per = request.POST.get('vig_per')
                 user.dep_per_id = request.POST.get('dep_per')
                 user.save()
+                messages.success(request, 'El usuario {} fue modificado'.format(user.nom_per+" "+user.ape_per))
                 return redirect('listar')
         else:
             users = Usuarios.objects.all()
@@ -98,6 +106,7 @@ def eliminar(request, idUsuario):
                 id_a_borrar= request.POST.get('id_per')
                 tupla=Usuarios.objects.get(id_per = id_a_borrar)
                 tupla.delete()
+                messages.warning(request, 'El usuario {} fue eliminado'.format(tupla.nom_per+" "+tupla.ape_per))
                 return redirect('listar')
         else:
             users = Usuarios.objects.all()
@@ -122,6 +131,7 @@ def listardep(request):
             Q(nom_dep__icontains=busqueda) 
             )
             datos = {'dependencias': res_busqueda}
+            messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
             return render(request, "crud_dependencias/listar.html", datos)
         else:
             datos = { 'dependencias' : lista }
@@ -138,6 +148,7 @@ def agregardep(request):
             dep = Dependencias()
             dep.nom_dep = request.POST.get('nom_dep')
             dep.save()
+            messages.success(request, 'La dependencia {} fue agregada'.format(dep.nom_dep))
             return redirect('listardep')
     else:
         deps = Dependencias.objects.all()
@@ -152,6 +163,7 @@ def actualizardep(request, idDependencia):
                 dep.id_dep = request.POST.get('id')
                 dep.nom_dep = request.POST.get('nom_dep')
                 dep.save()
+                messages.success(request, 'La dependencia {} fue modificada'.format(dep.nom_dep))
                 return redirect('listardep')
         else:
             deps = Dependencias.objects.all()
@@ -171,6 +183,7 @@ def eliminardep(request, idDependencia):
                 id_a_borrar= request.POST.get('id')
                 tupla=Dependencias.objects.get(id_dep = id_a_borrar)
                 tupla.delete()
+                messages.success(request, 'La dependencia {} fue eliminada'.format(tupla.nom_dep))
                 return redirect('listardep')
         else:
             deps = Dependencias.objects.all()
@@ -205,6 +218,7 @@ def listarveh(request):
             Q(obs_veh__icontains=busqueda) 
             )
             datos = {'vehiculos': res_busqueda}
+            messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
             return render(request, "crud_vehiculos/listar.html", datos)
         else:
             datos = { 'vehiculos' : lista }
@@ -234,6 +248,7 @@ def agregarveh(request):
             veh.soa_veh_id = request.POST.get('soa_veh')
             veh.tec_veh_id = request.POST.get('tec_veh')
             veh.save()
+            messages.success(request, 'El vehiculo de placas {} fue agregado'.format(veh.pla_veh))
             return redirect('listarveh')
     else:
         vehs = Vehiculos.objects.all()
@@ -264,6 +279,7 @@ def actualizarveh(request, idVehiculo):
                 veh.soa_veh_id = request.POST.get('soa_veh')
                 veh.tec_veh_id = request.POST.get('tec_veh')
                 veh.save()
+                messages.success(request, 'El vehiculo de placas {} fue modificado'.format(veh.pla_veh))
                 return redirect('listarveh')
         else:
             veh = Vehiculos.objects.get( pla_veh=idVehiculo )
@@ -282,7 +298,6 @@ def actualizarveh(request, idVehiculo):
         datos = {'vehiculos' : vehs,'vehiculo' : veh, 'dependencias' : deps,'soats': soats, 'tecs': tecs}
         return render(request,"crud_vehiculos/actualizar.html",datos)
 
-
 def eliminarveh(request, idVehiculo):
     try:
         if request.method=='POST':
@@ -290,6 +305,7 @@ def eliminarveh(request, idVehiculo):
                 id_a_borrar= request.POST.get('id')
                 tupla=Vehiculos.objects.get(pla_veh = id_a_borrar)
                 tupla.delete()
+                messages.success(request, 'El vehiculo de placas {} fue eliminado'.format(tupla.pla_veh))
                 return redirect('listarveh')
         else:
             vehs = Vehiculos.objects.all()
@@ -301,6 +317,7 @@ def eliminarveh(request, idVehiculo):
         veh = None
         datos = { 'vehiculos' : vehs , 'vehiculo' : veh }
         return render(request, "crud_vehiculos/eliminar.html", datos)
+
 def listarsoa(request):
 
     if request.method == 'POST':
@@ -315,6 +332,7 @@ def listarsoa(request):
             Q(fec_ven_soa__icontains=busqueda) 
             )
             datos = {'soats': res_busqueda}
+            messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
             return render(request, "crud_soat/listar.html", datos)
         else:
             datos = { 'soats' : lista }
@@ -327,16 +345,19 @@ def listarsoa(request):
 def agregarsoa(request):
     if request.method == 'POST':
         if request.POST.get('nom_emp_soa') and request.POST.get('fec_exp_soa'):
+            if request.POST.get('fec_ven_soa') > request.POST.get('fec_exp_soa'):
             
-            soat = Soat()
-            soat.id_soa = request.POST.get('id_soa')
-            soat.nom_emp_soa = request.POST.get('nom_emp_soa')
-            temp = request.POST.get('fec_exp_soa')
-            print(temp)
-            soat.fec_exp_soa = request.POST.get('fec_exp_soa')
-            soat.fec_ven_soa = request.POST.get('fec_ven_soa')
-            soat.save()
-            return redirect('listarsoa')
+                soat = Soat()
+                soat.id_soa = request.POST.get('id_soa')
+                soat.nom_emp_soa = request.POST.get('nom_emp_soa')
+                soat.fec_exp_soa = request.POST.get('fec_exp_soa')
+                soat.fec_ven_soa = request.POST.get('fec_ven_soa')
+                soat.save()
+                messages.success(request, 'El SOAT de {} fue agregado'.format(soat.nom_emp_soa))
+                return redirect('listarsoa')
+            else:
+                messages.warning(request, 'La fecha de expedición es mayor a la de vencimiento.')
+                return redirect('agregarsoa')
     else:
         soats = Soat.objects.all()
         datos = {'dependencias' : soats}
@@ -346,13 +367,19 @@ def actualizarsoa(request, idSoat):
     try:
         if request.method == 'POST':
             if request.POST.get('nom_emp_soa') and request.POST.get('fec_exp_soa'):
-                soat = Soat()
-                soat.id_soa = request.POST.get('id')
-                soat.nom_emp_soa = request.POST.get('nom_emp_soa')
-                soat.fec_exp_soa = request.POST.get('fec_exp_soa')
-                soat.fec_ven_soa = request.POST.get('fec_ven_soa')
-                soat.save()
-                return redirect('listarsoa')
+                if request.POST.get('fec_ven_soa') > request.POST.get('fec_exp_soa'):
+            
+                    soat = Soat()
+                    soat.id_soa = request.POST.get('id')
+                    soat.nom_emp_soa = request.POST.get('nom_emp_soa')
+                    soat.fec_exp_soa = request.POST.get('fec_exp_soa')
+                    soat.fec_ven_soa = request.POST.get('fec_ven_soa')
+                    soat.save()
+                    messages.success(request, 'El SOAT de {} fue modificado'.format(soat.nom_emp_soa))
+                    return redirect('listarsoa')
+                else:
+                    messages.warning(request, 'La fecha de expedición es mayor a la de vencimiento.')
+                    return redirect('agregarsoa')
         else:
             soat = Soat.objects.get( id_soa=idSoat )
             soat.fec_exp_soa = date.strftime(soat.fec_exp_soa, "%Y-%m-%d")
@@ -366,7 +393,6 @@ def actualizarsoa(request, idSoat):
         datos = {'soats' : soats, 'soat' : soat }
         return render(request,"crud_soat/actualizar.html",datos)
 
-
 def eliminarsoa(request, idSoat):
     try:
         if request.method=='POST':
@@ -374,6 +400,7 @@ def eliminarsoa(request, idSoat):
                 id_a_borrar= request.POST.get('id')
                 tupla=Soat.objects.get(id_soa = id_a_borrar)
                 tupla.delete()
+                messages.success(request, 'El SOAT de {} fue eliminado'.format(tupla.nom_emp_soa))
                 return redirect('listarsoa')
         else:
             soats = Soat.objects.all()
@@ -399,6 +426,7 @@ def listartec(request):
             Q(fec_exp_tec__icontains=busqueda) |
             Q(fec_ven_tec__icontains=busqueda) 
             )
+            messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
             datos = {'tecs': res_busqueda}
             return render(request, "crud_tecno/listar.html", datos)
         else:
@@ -412,14 +440,18 @@ def listartec(request):
 def agregartec(request):
     if request.method == 'POST':
         if request.POST.get('nom_emp_tec') and request.POST.get('fec_exp_tec'):
-            
-            tec = Tecnicomecanica()
-            tec.id_tec = request.POST.get('id_tec')
-            tec.nom_emp_tec = request.POST.get('nom_emp_tec')
-            tec.fec_exp_tec = request.POST.get('fec_exp_tec')
-            tec.fec_ven_tec = request.POST.get('fec_ven_tec')
-            tec.save()
-            return redirect('listartec')
+            if request.POST.get('fec_ven_tec') > request.POST.get('fec_exp_tec'):
+                tec = Tecnicomecanica()
+                tec.id_tec = request.POST.get('id_tec')
+                tec.nom_emp_tec = request.POST.get('nom_emp_tec')
+                tec.fec_exp_tec = request.POST.get('fec_exp_tec')
+                tec.fec_ven_tec = request.POST.get('fec_ven_tec')
+                tec.save()
+                messages.success(request, 'La técnico mecánica de {} fue agregada'.format(tec.nom_emp_tec))
+                return redirect('listartec')
+            else:
+                messages.warning(request, 'La fecha de expedición es mayor a la de vencimiento.')
+                return redirect('agregartec')
     else:
         tecs = Tecnicomecanica.objects.all()
         datos = {'tecs' : tecs}
@@ -429,13 +461,18 @@ def actualizartec(request, idTecno):
     try:
         if request.method == 'POST':
             if request.POST.get('nom_emp_tec') and request.POST.get('fec_exp_tec'):
-                tec = Tecnicomecanica()
-                tec.id_tec = request.POST.get('id')
-                tec.nom_emp_tec = request.POST.get('nom_emp_tec')
-                tec.fec_exp_tec = request.POST.get('fec_exp_tec')
-                tec.fec_ven_tec = request.POST.get('fec_ven_tec')
-                tec.save()
-                return redirect('listartec')
+                if request.POST.get('fec_ven_tec') > request.POST.get('fec_exp_tec'):
+                    tec = Tecnicomecanica()
+                    tec.id_tec = request.POST.get('id')
+                    tec.nom_emp_tec = request.POST.get('nom_emp_tec')
+                    tec.fec_exp_tec = request.POST.get('fec_exp_tec')
+                    tec.fec_ven_tec = request.POST.get('fec_ven_tec')
+                    tec.save()
+                    messages.success(request, 'La técnico mecánica de {} fue modificada'.format(tec.nom_emp_soa))
+                    return redirect('listartec')
+                else:
+                    messages.warning(request, 'La fecha de expedición es mayor a la de vencimiento.')
+                    return redirect('agregartec')
         else:
             tec = Tecnicomecanica.objects.get( id_tec=idTecno )
             tec.fec_exp_tec = date.strftime(tec.fec_exp_tec, "%Y-%m-%d")
@@ -449,7 +486,6 @@ def actualizartec(request, idTecno):
         datos = {'tecs' : tecs, 'tec' : tec }
         return render(request,"crud_tecno/actualizar.html",datos)
 
-
 def eliminartec(request, idTecno):
     try:
         if request.method=='POST':
@@ -457,6 +493,7 @@ def eliminartec(request, idTecno):
                 id_a_borrar= request.POST.get('id')
                 tupla=Tecnicomecanica.objects.get(id_tec = id_a_borrar)
                 tupla.delete()
+                messages.success(request, 'La técnico mecánica de {} fue eliminada'.format(tupla.nom_emp_soa))
                 return redirect('listartec')
         else:
             tec = Tecnicomecanica.objects.get( id_tec=idTecno )
@@ -484,6 +521,7 @@ def listarasi(request):
             Q(id_per_id__icontains=busqueda)|
             Q(id_veh_id__icontains=busqueda)
             )
+            messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
             datos = {'asis': res_busqueda}
             return render(request, "crud_asignaciones/listar.html", datos)
         else:
@@ -498,13 +536,16 @@ def listarasi(request):
 def agregarasi(request):
     if request.method == 'POST':
         if request.POST.get('id_per') and request.POST.get('id_veh'):
-            
+            veh = Vehiculos.objects.get( pla_veh= request.POST.get('id_veh'))
             asi = VehiculosAsignados()
             asi.id_per_id = request.POST.get('id_per')
             asi.id_veh_id = request.POST.get('id_veh')
             asi.fec_sal = request.POST.get('fec_sal')
             asi.obs_veh_asi = request.POST.get('obs_asi')
             asi.save()
+            veh.est_veh = False
+            veh.save()
+            messages.success(request, 'Vehiculo de placas {} asignado al usuario {}'.format(asi.id_veh_id,asi.id_per_id))
             return redirect('listarasi')
     else:
         asis = VehiculosAsignados.objects.all()
@@ -517,19 +558,24 @@ def actualizarasi(request, idAsignacion):
     try:
         if request.method == 'POST':
             if request.POST.get('id_per') and request.POST.get('id_veh'):
+                
                 asi_id_old = request.POST.get('id')
                 asi_old = VehiculosAsignados()
                 asi_old = VehiculosAsignados.objects.get( id=asi_id_old )
-
-                asi = VehiculosAsignados()
-                asi.id = request.POST.get('id')
-                asi.id_per_id = request.POST.get('id_per')
-                asi.id_veh_id = request.POST.get('id_veh')
-                asi.fec_ing = asi_old.fec_ing
-                asi.fec_sal = request.POST.get('fec_sal')
-                asi.obs_veh_asi = request.POST.get('obs_asi')
-                asi.save()
-                return redirect('listarasi')
+                if( asi_old.fec_sal < request.POST.get('fec_sal')):
+                    asi = VehiculosAsignados()
+                    asi.id = request.POST.get('id')
+                    asi.id_per_id = request.POST.get('id_per')
+                    asi.id_veh_id = request.POST.get('id_veh')
+                    asi.fec_ing = asi_old.fec_ing
+                    asi.fec_sal = request.POST.get('fec_sal')
+                    asi.obs_veh_asi = request.POST.get('obs_asi')
+                    asi.save()
+                    messages.success(request, 'La asignacion {} fue modificada'.format(asi.id))
+                    return redirect('listarasi')
+                else:
+                    messages.warning(request, 'La fecha de ingreso es mayor a la de finalización.')
+                    return redirect('actualizarasi')
         else:
             asi = VehiculosAsignados.objects.get( id=idAsignacion )
             asi.fec_sal = date.strftime(asi.fec_sal, "%Y-%m-%d %H:%M")
@@ -546,14 +592,18 @@ def actualizarasi(request, idAsignacion):
         datos = {'asis' : asis, 'asi' : asi, 'usuarios': users, 'vehiculos': vehs} 
         return render(request,"crud_asignaciones/actualizar.html",datos)
 
-
 def eliminarasi(request, idAsignacion):
     try:
         if request.method=='POST':
             if request.POST.get('id'):
                 id_a_borrar= request.POST.get('id')
+                
                 tupla=VehiculosAsignados.objects.get(id = id_a_borrar)
+                veh = Vehiculos.objects.get( pla_veh = tupla.id_veh_id )
+                veh.est_veh = True
                 tupla.delete()
+                veh.save()
+                messages.warning(request, 'La asignación {} fue eliminada.'.format(tupla.id))
                 return redirect('listarasi')
         else:
             asi = VehiculosAsignados.objects.get( id=idAsignacion )

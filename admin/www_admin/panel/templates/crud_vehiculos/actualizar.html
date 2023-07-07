@@ -7,6 +7,15 @@ Actualizar Vehiculo
     <h1>Actualizar Vehiculo</h1>
 
     <form action="" method="POST">
+        <div class="messages">
+            {% if messages %}
+            <ul class="messages">
+              {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
         {% csrf_token %}
 
         <div class="form-group row">
@@ -155,9 +164,8 @@ Actualizar Vehiculo
                         </div>
                     </div>
                     <select id="dep_veh" name="dep_veh" class="custom-select" required="required">
-                        <option value="null">Selecciona una opción</option>
                         {% for i in dependencias %}
-                        <option value="{{i.id_dep}}"> {{i.nom_dep}} </option>
+                        <option value="{{i.id_dep}}" {% if i.id_dep == vehiculo.dep_veh_id %} selected {% endif %}>{{i.nom_dep}} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -172,10 +180,10 @@ Actualizar Vehiculo
                             <i class="fa fa-calendar-check-o"></i>
                         </div>
                     </div>
-                    <select id="soa_veh" name="soa_veh" class="custom-select" required="required">
-                        <option value="null">Selecciona una opción</option>
+                    <select id="soa_veh" name="soa_veh" class="custom-select" required="required" >
+                        
                         {% for i in soats %}
-                        <option value="{{i.id_soa}}"> {{i.id_soa}} - {{i.fec_exp_soa}} </option>
+                        <option value="{{i.id_soa}}" {% if i.id_soa == vehiculo.soa_veh_id %} selected {% endif %}>ID: {{i.id_soa}} - {{i.fec_exp_soa}} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -191,9 +199,8 @@ Actualizar Vehiculo
                         </div>
                     </div>
                     <select id="tec_veh" name="tec_veh" class="custom-select" required="required">
-                        <option value="null">Selecciona una opción</option>
                         {% for i in tecs %}
-                        <option value="{{i.id_tec}}"> {{i.id_tec}} - {{i.fec_exp_tec}} </option>
+                        <option value="{{i.id_tec}}" {% if i.id_tec == vehiculo.tec_veh_id %} selected {% endif %}>ID: {{i.id_tec}} - {{i.fec_exp_tec}} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -221,7 +228,7 @@ Actualizar Vehiculo
                             <i class="fa fa-file-text"></i>
                         </div>
                     </div>
-                    <input id="obs_veh" name="obs_veh" type="text" class="form-control">
+                    <input id="obs_veh" name="obs_veh" type="text" class="form-control" value="{{ vehiculo.obs_veh }}">
                 </div>
             </div>
         </div>

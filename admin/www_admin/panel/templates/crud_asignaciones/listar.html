@@ -5,7 +5,17 @@ Lista de Asignaciones
 {% block content %}
 <div class="right_col" role="main">
   <h1>Lista de asignaciones</h1>
+  <div class="messages">
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
   <form action="" method="POST" style="float: left">
+    
     <div style="display: inline-block;">
       <form action="" method="POST">
         {% csrf_token %}
@@ -25,7 +35,7 @@ Lista de Asignaciones
           <th scope="col">Persona encargada</th>
           <th scope="col">Vehiculo asignado</th>
           <th scope="col">Fecha de ingreso</th>
-          <th scope="col">Fecha de salida</th>
+          <th scope="col">Fecha de finalización</th>
           <th scope="col">Observaciones</th>
           <th scope="col">Acción</th>
 

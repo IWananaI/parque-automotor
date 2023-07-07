@@ -5,7 +5,15 @@ Lista de Vehiculos
 {% block content %}
 <div class="right_col" role="main">
   <h1>Lista de Vehiculos</h1>
-
+  <div class="messages">
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
   <form action="" method="POST" style="float: left">
     <div style="display: inline-block;">
       <form action="" method="POST">
@@ -36,7 +44,6 @@ Lista de Vehiculos
           <th scope="col">Tecno</th>
           <th scope="col">Observaciones</th>
           <th scope="col">Estado</th>
-          <th scope="col">Persona Asignada</th>
           <th scope="col">Acción</th>
     
 
@@ -61,7 +68,6 @@ Lista de Vehiculos
               <td>{{ u.tec_veh.fec_exp_tec }}</td>
               <td>{{ u.obs_veh }}</td>
               <td>{% if u.est_veh == True %} Funcionamiento {% else %} No Funcionamiento {% endif %}</td>
-              <td>{{ u.per_asi_veh.nom_per }}</td>
               <td>
                 <button class="btn btn-warning" onclick="window.location.href='actualizarveh/{{ u.pla_veh }}'"><i class="fa fa-refresh"></i></i></button>
                 <button class="btn btn-danger" onclick="window.location.href='eliminarveh/{{ u.pla_veh }}'"><i class="fa fa-trash"></i></i></button>

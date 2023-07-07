@@ -7,7 +7,15 @@ Actualizar SOAT
     <h1>Actualizar SOAT</h1>
 
     <form action="" method="POST">
-
+        <div class="messages">
+            {% if messages %}
+            <ul class="messages">
+              {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
         {% csrf_token %}
         <div class="form-group row">
 

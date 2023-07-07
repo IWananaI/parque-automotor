@@ -5,11 +5,19 @@ Agregar Técnico mecánica
 {% block content %}
 <div class="right_col" role="main">
   <h1>Agregar Tecnomecánica</h1>
-
+ 
   <form action="agregartec" method="POST">
-
+    <div class="messages">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
     {% csrf_token %}
-  <br>
+    <br>
     <div class="form-group row">
       <label for="nom_emp_tec" class="col-4 col-form-label">Nombre de la empresa</label>
       <div class="col-8">
@@ -54,7 +62,8 @@ Agregar Técnico mecánica
       <div class="offset-4 col-8">
         <button name="back" class="btn btn-primary" onclick="history.back(); return false;"> <i
             class="fa fa-arrow-left"></i> Volver</button>
-        <button name="submit" type="submit" class="btn btn-primary"> <i class="fa fa-plus"></i> Agregar Tecnomecánica</button>
+        <button name="submit" type="submit" class="btn btn-primary"> <i class="fa fa-plus"></i> Agregar
+          Tecnomecánica</button>
       </div>
     </div>
   </form>
