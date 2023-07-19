@@ -54,7 +54,8 @@ class Vehiculos(models.Model):
     obs_veh = models.CharField(max_length=200,null=True)
     dep_veh = models.ForeignKey(Dependencias,
                                 on_delete=models.CASCADE,
-                                blank=True)
+                                blank=True,
+                                null = True)
     per_asi_veh = models.ManyToManyField(Usuarios,
                                         through='VehiculosAsignados',
                                         blank=True)
@@ -81,3 +82,31 @@ class VehiculosAsignados(models.Model):
     obs_veh_asi = models.CharField(max_length=200)
     class Meta:
         db_table = 'vehiculos_asignados'
+
+class Preoperacionalesm(models.Model):
+    id_pre = models.AutoField(primary_key=True)
+    niv_pre = models.CharField(max_length=20,null=False)
+    man_pre = models.CharField(max_length=20,null=False)
+    dir_pre = models.CharField(max_length=20,null=False)
+    gua_pre = models.CharField(max_length=20,null=False)
+    cha_pre = models.CharField(max_length=20,null=False)
+    sus_pre = models.CharField(max_length=20,null=False)
+    fre_pre = models.CharField(max_length=20,null=False)
+    lla_pre = models.CharField(max_length=20,null=False)
+    rin_pre = models.CharField(max_length=20,null=False)
+    tre_pre = models.CharField(max_length=20,null=False)
+    exo_pre = models.CharField(max_length=20,null=False)
+    ret_pre = models.CharField(max_length=20,null=False)
+    man_mec_pre = models.CharField(max_length=20,null=False)
+    luc_pre = models.CharField(max_length=20,null=False)
+    dir_stop_pre = models.CharField(max_length=20,null=False)
+    pit_pre = models.CharField(max_length=20,null=False)
+    obs_pre = models.CharField(max_length=300)
+    fec_pre = models.DateTimeField(null=True),
+    pla_pre = models.ForeignKey(Vehiculos,
+                                on_delete=models.CASCADE,
+                                blank=True,
+                                null = True)
+    
+    class Meta:
+        db_table = 'preoperacionalesm'

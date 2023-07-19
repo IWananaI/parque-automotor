@@ -1,0 +1,96 @@
+{% extends '../../../index_master.html' %}
+{% block title %}
+Lista de revisiones preoperacionales
+{% endblock %}
+{% block content %}
+<div class="right_col" role="main">
+  <h1>Lista de revisiones preoperacionales</h1>
+  <div class="messages">
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  <form action="" method="POST" style="float: left">
+    <div style="display: inline-block;">
+      <form action="" method="POST">
+        {% csrf_token %}
+        <input type="text" name="keyword" id="keyword" class="form-control"
+          style="width: 150px; display: inline-block;">
+        <button type="submit" name="search" class="btn btn-success"><i class="fa fa-search"></i></button>
+
+    </div>
+  </form>
+  <button name="agregarprem" class="btn btn-primary" onclick="window.location.href='agregarprem'"
+    style="display: inline-block;"><i class="fa fa-plus"></i> Nueva revisión preoperacional</button>
+  <div class="table-responsive">
+
+    <table class="table ">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Placa</th>
+          <th scope="col">Nivel de aceite</th>
+          <th scope="col">Manillares</th>
+          <th scope="col">Direccion</th>
+          <th scope="col">Guarda barros</th>
+          <th scope="col">Chasis</th>
+          <th scope="col">Suspensión</th>
+          <th scope="col">Frenos</th>
+          <th scope="col">Llantas</th>
+          <th scope="col">Rines</th>
+          <th scope="col">Tren de arrastre</th>
+          <th scope="col">Exosto</th>
+          <th scope="col">Retrovisores</th>
+          <th scope="col">Mantenimiento mecánico</th>
+          <th scope="col">Luces</th>
+          <th scope="col">Direccionales y stop</th>
+          <th scope="col">Pito</th>
+          <th scope="col">Observaciones</th>
+          <th scope="col">Acción</th>
+
+
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for u in prems %}
+        <tr>
+          <th scope="row">{{ u.id_pre }}</th>
+          <td>{{ u.pla_pre_id }}</td>
+          <td>{{ u.niv_pre }}</td>
+          <td>{{ u.man_pre }}</td>
+          <td>{{ u.dir_pre }}</td>
+          <td>{{ u.gua_pre }}</td>
+          <td>{{ u.cha_pre }}</td>
+          <td>{{ u.sus_pre }}</td>
+          <td>{{ u.fre_pre }}</td>
+          <td>{{ u.lla_pre }}</td>
+          <td>{{ u.rin_pre }}</td>
+          <td>{{ u.tre_pre }}</td>
+          <td>{{ u.exo_pre }}</td>
+          <td>{{ u.ret_pre }}</td>
+          <td>{{ u.man_mec_pre }}</td>
+          <td>{{ u.luc_pre }}</td>
+          <td>{{ u.dir_stop_pre }}</td>
+          <td>{{ u.pit_pre }}</td>
+          <td>{{ u.obs_pre }}</td>
+          <td>
+            <button class="btn btn-warning" onclick="window.location.href='actualizarprem/{{ u.id_pre }}'"><i
+                class="fa fa-refresh"></i></i></button>
+            <button class="btn btn-danger" onclick="window.location.href='eliminarprem/{{ u.id_pre }}'"><i
+                class="fa fa-trash"></i></i></button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table> 
+  </div>
+
+</div>
+
+{% endblock %}

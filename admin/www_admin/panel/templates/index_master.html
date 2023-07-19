@@ -8,7 +8,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="images/favicon.ico" type="image/ico" />
+  <link rel="icon" href="\static\carro-deportivo.png" type="image/png" />
 
   <title>Parque automotor de la alcaldía</title>
 
@@ -103,10 +103,9 @@
               <ul class="nav side-menu">
                 <li><a><i class="fa fa-check"></i> Preoperacionales <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
-                    <li><a href="#"><i class="fa fa-list"></i> Listar</a></li>
-                    <li><a href="#"><i class="fa fa-plus"></i> Agregar</a></li>
-                    <li><a href="#"><i class="fa fa-refresh"></i> Actualizar</a></li>
-                    <li><a href="#"><i class="fa fa-trash"></i> Eliminar</a></li>
+                    <li><a href="{% url 'listarprem' %}"><i class="fa fa-motorcycle"></i> Moto</a></li>
+                    <li><a href="#"><i class="fa fa-plus"></i> Carro</a></li>
+                    <li><a href="#"><i class="fa fa-refresh"></i> Otro</a></li>
                   </ul>
                 </li>
                 <li><a><i class="fa fa-clipboard"></i> Periodicas <span class="fa fa-chevron-down"></span></a>

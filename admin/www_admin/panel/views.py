@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica, VehiculosAsignados
+from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica, VehiculosAsignados, Preoperacionalesm
 from django.db.models import Q
 from datetime import date
 from django.contrib import messages
@@ -60,7 +60,7 @@ def agregar(request):
                 messages.success(request, 'El usuario {} fue agregado'.format(user.nom_per+" "+user.ape_per))
                 return redirect('listar')
             except:
-                messages.warning(request, 'Ha ocurrido un error en los datos, intentalo nuevamente por favor')
+                messages.error(request, 'Ha ocurrido un error en los datos, intentalo nuevamente por favor')
                 return redirect('agregar')
     else:
         users = Usuarios.objects.all()
@@ -378,7 +378,7 @@ def actualizarsoa(request, idSoat):
                     messages.success(request, 'El SOAT de {} fue modificado'.format(soat.nom_emp_soa))
                     return redirect('listarsoa')
                 else:
-                    messages.warning(request, 'La fecha de expedición es mayor a la de vencimiento.')
+                    messages.error(request, 'La fecha de expedición es mayor a la de vencimiento.')
                     return redirect('agregarsoa')
         else:
             soat = Soat.objects.get( id_soa=idSoat )
@@ -468,10 +468,10 @@ def actualizartec(request, idTecno):
                     tec.fec_exp_tec = request.POST.get('fec_exp_tec')
                     tec.fec_ven_tec = request.POST.get('fec_ven_tec')
                     tec.save()
-                    messages.success(request, 'La técnico mecánica de {} fue modificada'.format(tec.nom_emp_soa))
+                    messages.success(request, 'La técnico mecánica de {} fue modificada'.format(tec.nom_emp_tec))
                     return redirect('listartec')
                 else:
-                    messages.warning(request, 'La fecha de expedición es mayor a la de vencimiento.')
+                    messages.error(request, 'La fecha de expedición es mayor a la de vencimiento.')
                     return redirect('agregartec')
         else:
             tec = Tecnicomecanica.objects.get( id_tec=idTecno )
@@ -493,7 +493,7 @@ def eliminartec(request, idTecno):
                 id_a_borrar= request.POST.get('id')
                 tupla=Tecnicomecanica.objects.get(id_tec = id_a_borrar)
                 tupla.delete()
-                messages.success(request, 'La técnico mecánica de {} fue eliminada'.format(tupla.nom_emp_soa))
+                messages.success(request, 'La técnico mecánica de {} fue eliminada'.format(tupla.nom_emp_tec))
                 return redirect('listartec')
         else:
             tec = Tecnicomecanica.objects.get( id_tec=idTecno )
@@ -615,3 +615,122 @@ def eliminarasi(request, idAsignacion):
         asis = VehiculosAsignados.objects.all()
         datos = {'asis' : asis, 'asi' : asi }
         return render(request,"crud_asignaciones/eliminar.html",datos)
+
+def listarprem(request):
+
+    if request.method == 'POST':
+        busqueda = request.POST.get('keyword')
+        lista = Preoperacionalesm.objects.all()
+
+        if busqueda is not None:
+            res_busqueda = lista.filter(
+            Q(id_pre__icontains=busqueda) |
+            Q(pla_pre_id__icontains=busqueda)
+            )
+            messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
+            datos = {'prems': res_busqueda}
+            return render(request, "revisiones/preoperacionales/moto/listar.html", datos)
+        else:
+            datos = { 'prems' : lista }
+            return render(request, "revisiones/preoperacionales/moto/listar.html", datos)
+    else:
+        prems = Preoperacionalesm.objects.order_by('-id_pre')[:10]
+
+        datos = { 'prems' : prems}
+        return render(request, "revisiones/preoperacionales/moto/listar.html", datos)
+    
+def agregarprem(request):
+    if request.method == 'POST':
+        if request.POST.get('pla_pre'):
+            prem = Preoperacionalesm()
+            prem.niv_pre = request.POST.get('niv_pre')
+            prem.man_pre = request.POST.get('man_pre')
+            prem.dir_pre = request.POST.get('dir_pre')
+            prem.gua_pre = request.POST.get('gua_pre')
+            prem.cha_pre = request.POST.get('cha_pre')
+            prem.sus_pre = request.POST.get('sus_pre')
+            prem.fre_pre = request.POST.get('fre_pre')
+            prem.lla_pre = request.POST.get('lla_pre')
+            prem.rin_pre = request.POST.get('rin_pre')
+            prem.tre_pre = request.POST.get('tre_pre')
+            prem.exo_pre = request.POST.get('exo_pre')
+            prem.ret_pre = request.POST.get('ret_pre')
+            prem.man_mec_pre = request.POST.get('man_mec_pre')
+            prem.luc_pre = request.POST.get('luc_pre')
+            prem.dir_stop_pre = request.POST.get('dir_stop_pre')
+            prem.pit_pre = request.POST.get('pit_pre')
+            prem.obs_pre = request.POST.get('obs_pre')
+            prem.fec_pre = request.POST.get('fec_pre')
+            prem.pla_pre_id = request.POST.get('pla_pre')
+            prem.save()
+            messages.success(request, 'La asignación quedo registrada con el id {} sastifactoriamente'.format(prem.id_pre))
+            return redirect('listarprem')
+    else:
+        prems = Preoperacionalesm.objects.all()
+        datos = { 'prems' : prems}
+        return render(request, "revisiones/preoperacionales/moto/agregar.html", datos)
+    return render(request, "revisiones/preoperacionales/moto/agregar.html")
+
+def actualizarprem(request, idprem):
+    try:
+        if request.method == 'POST':
+            if request.POST.get('id_pre'):
+                asi_id_old = request.POST.get('id_pre')
+                asi_old = Preoperacionalesm()
+                asi_old = Preoperacionalesm.objects.get( id_pre=asi_id_old )
+                prem = Preoperacionalesm()
+                prem.id_pre = request.POST.get('id_pre')
+                prem.niv_pre = request.POST.get('niv_pre')
+                prem.man_pre = request.POST.get('man_pre')
+                prem.dir_pre = request.POST.get('dir_pre')
+                prem.gua_pre = request.POST.get('gua_pre')
+                prem.cha_pre = request.POST.get('cha_pre')
+                prem.sus_pre = request.POST.get('sus_pre')
+                prem.fre_pre = request.POST.get('fre_pre')
+                prem.lla_pre = request.POST.get('lla_pre')
+                prem.rin_pre = request.POST.get('rin_pre')
+                prem.tre_pre = request.POST.get('tre_pre')
+                prem.exo_pre = request.POST.get('exo_pre')
+                prem.ret_pre = request.POST.get('ret_pre')
+                prem.man_mec_pre = request.POST.get('man_mec_pre')
+                prem.luc_pre = request.POST.get('luc_pre')
+                prem.dir_stop_pre = request.POST.get('dir_stop_pre')
+                prem.pit_pre = request.POST.get('pit_pre')
+                prem.obs_pre = request.POST.get('obs_pre')
+                prem.fec_pre = asi_old.fec_pre
+                prem.pla_pre_id = request.POST.get('pla_pre')
+                prem.save()
+                messages.success(request, 'La revisión preoperacional con el id {} fue modificada'.format(prem.id_pre))
+                return redirect('listarprem')
+        else:
+            prem = Preoperacionalesm.objects.get( id_pre=idprem )
+            prems = Preoperacionalesm.objects.all()
+            datos = {'prems' : prems, 'prem' : prem }
+            return render(request,"revisiones/preoperacionales/moto/actualizar.html",datos)
+    except Preoperacionalesm.DoesNotExist:
+        prem = None
+        prems = Preoperacionalesm.objects.all()
+        datos = {'prems' : prems, 'prem' : prem }
+        return render(request,"revisiones/preoperacionales/moto/actualizar.html",datos)
+
+def eliminarprem(request, idprem):   
+    try:
+            if request.method=='POST':
+                if request.POST.get('id_pre'):
+                    id_a_borrar= request.POST.get('id_pre')
+                    
+                    tupla=Preoperacionalesm.objects.get(id_pre = id_a_borrar)
+                    messages.warning(request, 'La revisión preoperacional con el id {} fue eliminada.'.format(tupla.id_pre))
+                    tupla.delete()
+                    
+                    return redirect('listarprem')
+            else:
+                prem = Preoperacionalesm.objects.get( id_pre=idprem )
+            prems = Preoperacionalesm.objects.all()
+            datos = {'prems' : prems, 'prem' : prem }
+            return render(request,"revisiones/preoperacionales/moto/eliminar.html",datos)
+    except Preoperacionalesm.DoesNotExist:
+        prem = None
+        prems = Preoperacionalesm.objects.all()
+        datos = {'prems' : prems, 'prem' : prem }
+        return render(request,"revisiones/preoperacionales/moto/eliminar.html",datos)
