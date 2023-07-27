@@ -101,8 +101,8 @@ class Preoperacionalesm(models.Model):
     luc_pre = models.CharField(max_length=20,null=False)
     dir_stop_pre = models.CharField(max_length=20,null=False)
     pit_pre = models.CharField(max_length=20,null=False)
-    obs_pre = models.CharField(max_length=300)
-    fec_pre = models.DateTimeField(null=True),
+    obs_pre = models.CharField(max_length=500)
+    fec_pre = models.DateField(null=True)
     pla_pre = models.ForeignKey(Vehiculos,
                                 on_delete=models.CASCADE,
                                 blank=True,
@@ -110,3 +110,63 @@ class Preoperacionalesm(models.Model):
     
     class Meta:
         db_table = 'preoperacionalesm'
+
+class Preoperacionalesc(models.Model):
+    id_pre = models.AutoField(primary_key=True)
+    dir_del_pre = models.CharField(max_length=20,null=False)
+    dir_tra_pre = models.CharField(max_length=20,null=False)
+    sis_luc_pre = models.CharField(max_length=20,null=False)
+    luc_fre_pre = models.CharField(max_length=20,null=False)
+    luc_rev_pre = models.CharField(max_length=20,null=False)
+    luc_par_pre = models.CharField(max_length=20,null=False)
+    vpan_pre = models.CharField(max_length=20,null=False)
+    vlat_pre = models.CharField(max_length=20,null=False)
+    vtra_pre = models.CharField(max_length=20,null=False)
+    limp_pre = models.CharField(max_length=20,null=False)
+    elat_pre = models.CharField(max_length=20,null=False)
+    eret_pre = models.CharField(max_length=20,null=False)
+    pit_pre = models.CharField(max_length=20,null=False)
+    taco_pre = models.CharField(max_length=20,null=False)
+    odo_pre = models.CharField(max_length=20,null=False)
+    gas_pre = models.CharField(max_length=20,null=False)
+    tem_pre = models.CharField(max_length=20,null=False)
+    cin_pre = models.CharField(max_length=20,null=False)
+    alar_pre = models.CharField(max_length=20,null=False)
+    cha_pue_pre = models.CharField(max_length=20,null=False)
+    pue_cie_pre = models.CharField(max_length=20,null=False)
+    esc_acc_pre = models.CharField(max_length=20,null=False)
+    pas_tec_pre = models.CharField(max_length=20,null=False)
+    ven_eme_pre = models.CharField(max_length=20,null=False)
+    alc_vol_pre = models.CharField(max_length=20,null=False)
+    fre_pri_pre = models.CharField(max_length=20,null=False)
+    fre_man_pre = models.CharField(max_length=20,null=False)
+    agu_lim_pre = models.CharField(max_length=20,null=False)
+    agu_ref_pre = models.CharField(max_length=20,null=False)
+    ace_mot_pre = models.CharField(max_length=20,null=False)
+    liq_fre_pre = models.CharField(max_length=20,null=False)
+    liq_bat_pre = models.CharField(max_length=20,null=False)
+    ace_hid_pre = models.CharField(max_length=20,null=False)
+    cor_pre = models.CharField(max_length=20,null=False)
+    man_pre = models.CharField(max_length=20,null=False)
+    est_lla_pre = models.CharField(max_length=20,null=False)
+    pre_lla_pre = models.CharField(max_length=20,null=False)
+    lab_lla_pre = models.CharField(max_length=20,null=False)
+    rep_lla_pre = models.CharField(max_length=20,null=False)
+    señ_eme_pre = models.CharField(max_length=20,null=False)
+    tac_pre = models.CharField(max_length=20,null=False)
+    cha_pre = models.CharField(max_length=20,null=False)
+    gat_pre = models.CharField(max_length=20,null=False)
+    gua_pre = models.CharField(max_length=20,null=False)
+    cru_pre = models.CharField(max_length=20,null=False)
+    her_pre = models.CharField(max_length=20,null=False)
+    bot_pre = models.CharField(max_length=20,null=False)
+    ext_pre = models.CharField(max_length=20,null=False)
+    obs_pre = models.CharField(max_length=500)
+    fec_pre = models.DateField(null=True)
+    pla_pre = models.ForeignKey(Vehiculos,
+                                on_delete=models.CASCADE,
+                                blank=True,
+                                null = True)
+    
+    class Meta:
+        db_table = 'preoperacionalesc'

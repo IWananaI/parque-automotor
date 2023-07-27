@@ -4,9 +4,17 @@ Agregar revisión preoperacional
 {% endblock %}
 {% block content %}
 <div class="right_col" role="main">
-  <h1>Agregar revisión preoperacional</h1>
+  <h1>Agregar revisión preoperacional para moto</h1>
   <form action="agregarprem" method="POST">
-
+    <div class="messages">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
     {% csrf_token %}
     <div class="form-group row">
       <label class="col-4 col-form-label" for="pla_pre">Placa</label>
@@ -27,7 +35,7 @@ Agregar revisión preoperacional
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text">
-              <i class="fa fa-calendar-times-o"></i>
+              <i class="fa fa-calendar"></i>
             </div>
           </div>
           <input id="fec_pre" name="fec_pre" type="date" class="form-control">

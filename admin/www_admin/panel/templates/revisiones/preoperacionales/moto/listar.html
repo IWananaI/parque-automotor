@@ -29,66 +29,141 @@ Lista de revisiones preoperacionales
   <div class="table-responsive">
 
     <table class="table ">
-      <thead>
         <tr>
           <th scope="col">ID</th>
-          <th scope="col">Placa</th>
-          <th scope="col">Nivel de aceite</th>
-          <th scope="col">Manillares</th>
-          <th scope="col">Direccion</th>
-          <th scope="col">Guarda barros</th>
-          <th scope="col">Chasis</th>
-          <th scope="col">Suspensión</th>
-          <th scope="col">Frenos</th>
-          <th scope="col">Llantas</th>
-          <th scope="col">Rines</th>
-          <th scope="col">Tren de arrastre</th>
-          <th scope="col">Exosto</th>
-          <th scope="col">Retrovisores</th>
-          <th scope="col">Mantenimiento mecánico</th>
-          <th scope="col">Luces</th>
-          <th scope="col">Direccionales y stop</th>
-          <th scope="col">Pito</th>
-          <th scope="col">Observaciones</th>
-          <th scope="col">Acción</th>
-
-
+          {% for u in prems %}
+          <td>{{ u.id_pre }}</td>
+          {% endfor %}
         </tr>
-      </thead>
-      <tbody>
 
-        {% for u in prems %}
         <tr>
-          <th scope="row">{{ u.id_pre }}</th>
+          <th scope="col">Placa</th>
+          {% for u in prems %}
           <td>{{ u.pla_pre_id }}</td>
-          <td>{{ u.niv_pre }}</td>
-          <td>{{ u.man_pre }}</td>
-          <td>{{ u.dir_pre }}</td>
-          <td>{{ u.gua_pre }}</td>
-          <td>{{ u.cha_pre }}</td>
-          <td>{{ u.sus_pre }}</td>
-          <td>{{ u.fre_pre }}</td>
-          <td>{{ u.lla_pre }}</td>
-          <td>{{ u.rin_pre }}</td>
-          <td>{{ u.tre_pre }}</td>
-          <td>{{ u.exo_pre }}</td>
-          <td>{{ u.ret_pre }}</td>
-          <td>{{ u.man_mec_pre }}</td>
-          <td>{{ u.luc_pre }}</td>
-          <td>{{ u.dir_stop_pre }}</td>
-          <td>{{ u.pit_pre }}</td>
-          <td>{{ u.obs_pre }}</td>
-          <td>
-            <button class="btn btn-warning" onclick="window.location.href='actualizarprem/{{ u.id_pre }}'"><i
-                class="fa fa-refresh"></i></i></button>
-            <button class="btn btn-danger" onclick="window.location.href='eliminarprem/{{ u.id_pre }}'"><i
-                class="fa fa-trash"></i></i></button>
-          </td>
+          {% endfor %}
         </tr>
-        {% endfor %}
-      </tbody>
 
-    </table> 
+        <tr>
+          <th scope="col">Fecha</th>
+          {% for u in prems %}
+          <td>{{ u.fec_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Nivel de aceite</th>
+          {% for u in prems %}
+          <td>{{ u.niv_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Manillares</th>
+          {% for u in prems %}
+          <td>{{ u.man_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Direccion</th>
+          {% for u in prems %}
+          <td>{{ u.dir_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Guarda barros</th>
+          {% for u in prems %}
+          <td>{{ u.gua_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Chasis</th>
+          {% for u in prems %}
+          <td>{{ u.cha_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Suspensión</th>
+          {% for u in prems %}
+          <td>{{ u.sus_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Frenos</th>
+          {% for u in prems %}
+          <td>{{ u.fre_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Llantas</th>
+          {% for u in prems %}
+          <td>{{ u.lla_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Rines</th>
+          {% for u in prems %}
+          <td>{{ u.rin_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Tren de arrastre</th>
+          {% for u in prems %}
+          <td>{{ u.tre_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Exosto</th>
+          {% for u in prems %}
+          <td>{{ u.exo_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Retrovisores</th>
+          {% for u in prems %}
+          <td>{{ u.ret_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Mantenimiento mecánico</th>
+          {% for u in prems %}
+          <td>{{ u.man_mec_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Luces</th>
+          {% for u in prems %}
+          <td>{{ u.luc_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Direccionales y stop</th>
+          {% for u in prems %}
+          <td>{{ u.dir_stop_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Pito</th>
+          {% for u in prems %}
+          <td>{{ u.pit_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Observaciones</th>
+          {% for u in prems %}
+          <td>{{ u.obs_pre }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="col">Acción</th>
+          {% for u in prems %}
+          <td>
+            <button class="btn btn-warning" onclick="window.location.href='actualizarprec/{{ u.id_pre }}'"><i
+                class="fa fa-refresh"></i></i></button>
+            <button class="btn btn-danger" onclick="window.location.href='eliminarprec/{{ u.id_pre }}'"><i
+                class="fa fa-trash"></i></i></button>
+          
+          </td>
+          {% endfor %}
+        </tr>
+    </table>
   </div>
 
 </div>

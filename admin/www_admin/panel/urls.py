@@ -34,4 +34,8 @@ urlpatterns = [
     path('agregarprem', views.agregarprem, name="agregarprem"),
     path('actualizarprem/<int:idprem>', views.actualizarprem, name="actualizarprem"),
     path('eliminarprem/<int:idprem>', views.eliminarprem, name="eliminarprem"),
+    path('listarprec', views.listarprec, name="listarprec"),
+    path('agregarprec', views.agregarprec, name="agregarprec"),
+    path('actualizarprec/<int:idprec>', views.actualizarprec, name="actualizarprec"),
+    path('eliminarprec/<int:idprec>', views.eliminarprec, name="eliminarprec"),
 ]

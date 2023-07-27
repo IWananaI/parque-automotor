@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica, VehiculosAsignados, Preoperacionalesm
+from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica, VehiculosAsignados, Preoperacionalesm, Preoperacionalesc
 from django.db.models import Q
 from datetime import date
 from django.contrib import messages
@@ -518,8 +518,8 @@ def listarasi(request):
             Q(fec_ing__icontains=busqueda) |
             Q(fec_sal__icontains=busqueda) |
             Q(obs_veh_asi__icontains=busqueda)|
-            Q(id_per_id__icontains=busqueda)|
-            Q(id_veh_id__icontains=busqueda)
+            Q(id_per=busqueda)|
+            Q(id_veh=busqueda)
             )
             messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
             datos = {'asis': res_busqueda}
@@ -625,7 +625,8 @@ def listarprem(request):
         if busqueda is not None:
             res_busqueda = lista.filter(
             Q(id_pre__icontains=busqueda) |
-            Q(pla_pre_id__icontains=busqueda)
+            Q(fec_pre__icontains=busqueda) |
+            Q(pla_pre=busqueda)
             )
             messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
             datos = {'prems': res_busqueda}
@@ -642,29 +643,33 @@ def listarprem(request):
 def agregarprem(request):
     if request.method == 'POST':
         if request.POST.get('pla_pre'):
-            prem = Preoperacionalesm()
-            prem.niv_pre = request.POST.get('niv_pre')
-            prem.man_pre = request.POST.get('man_pre')
-            prem.dir_pre = request.POST.get('dir_pre')
-            prem.gua_pre = request.POST.get('gua_pre')
-            prem.cha_pre = request.POST.get('cha_pre')
-            prem.sus_pre = request.POST.get('sus_pre')
-            prem.fre_pre = request.POST.get('fre_pre')
-            prem.lla_pre = request.POST.get('lla_pre')
-            prem.rin_pre = request.POST.get('rin_pre')
-            prem.tre_pre = request.POST.get('tre_pre')
-            prem.exo_pre = request.POST.get('exo_pre')
-            prem.ret_pre = request.POST.get('ret_pre')
-            prem.man_mec_pre = request.POST.get('man_mec_pre')
-            prem.luc_pre = request.POST.get('luc_pre')
-            prem.dir_stop_pre = request.POST.get('dir_stop_pre')
-            prem.pit_pre = request.POST.get('pit_pre')
-            prem.obs_pre = request.POST.get('obs_pre')
-            prem.fec_pre = request.POST.get('fec_pre')
-            prem.pla_pre_id = request.POST.get('pla_pre')
-            prem.save()
-            messages.success(request, 'La asignación quedo registrada con el id {} sastifactoriamente'.format(prem.id_pre))
-            return redirect('listarprem')
+            try:
+                prem = Preoperacionalesm()
+                prem.niv_pre = request.POST.get('niv_pre')
+                prem.man_pre = request.POST.get('man_pre')
+                prem.dir_pre = request.POST.get('dir_pre')
+                prem.gua_pre = request.POST.get('gua_pre')
+                prem.cha_pre = request.POST.get('cha_pre')
+                prem.sus_pre = request.POST.get('sus_pre')
+                prem.fre_pre = request.POST.get('fre_pre')
+                prem.lla_pre = request.POST.get('lla_pre')
+                prem.rin_pre = request.POST.get('rin_pre')
+                prem.tre_pre = request.POST.get('tre_pre')
+                prem.exo_pre = request.POST.get('exo_pre')
+                prem.ret_pre = request.POST.get('ret_pre')
+                prem.man_mec_pre = request.POST.get('man_mec_pre')
+                prem.luc_pre = request.POST.get('luc_pre')
+                prem.dir_stop_pre = request.POST.get('dir_stop_pre')
+                prem.pit_pre = request.POST.get('pit_pre')
+                prem.obs_pre = request.POST.get('obs_pre')
+                prem.fec_pre = request.POST.get('fec_pre')
+                prem.pla_pre_id = request.POST.get('pla_pre')
+                prem.save()
+                messages.success(request, 'La asignación quedo registrada con el id {} sastifactoriamente'.format(prem.id_pre))
+                return redirect('listarprem')
+            except:
+                messages.error(request, 'La placa de la moto {} no existe'.format(prem.pla_pre_id))
+                return redirect('agregarprem')
     else:
         prems = Preoperacionalesm.objects.all()
         datos = { 'prems' : prems}
@@ -734,3 +739,191 @@ def eliminarprem(request, idprem):
         prems = Preoperacionalesm.objects.all()
         datos = {'prems' : prems, 'prem' : prem }
         return render(request,"revisiones/preoperacionales/moto/eliminar.html",datos)
+
+def listarprec(request):
+
+    if request.method == 'POST':
+        busqueda = request.POST.get('keyword')
+        lista = Preoperacionalesc.objects.all()
+
+        if busqueda is not None:
+            res_busqueda = lista.filter(
+            Q(id_pre__icontains=busqueda) |
+            Q(fec_pre__icontains=busqueda) |
+            Q(pla_pre=busqueda)
+            )
+            messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
+            datos = {'precs': res_busqueda}
+            return render(request, "revisiones/preoperacionales/carro/listar.html", datos)
+        else:
+            datos = { 'precs' : lista }
+            return render(request, "revisiones/preoperacionales/carro/listar.html", datos)
+    else:
+        precs = Preoperacionalesc.objects.order_by('-id_pre')[:10]
+
+        datos = { 'precs' : precs}
+        return render(request, "revisiones/preoperacionales/carro/listar.html", datos)
+    
+def agregarprec(request):
+    if request.method == 'POST':
+        if request.POST.get('pla_pre'):
+            try:
+                prec = Preoperacionalesc()
+                prec.dir_del_pre = request.POST.get('dir_del_pre')
+                prec.dir_tra_pre = request.POST.get('dir_tra_pre')
+                prec.sis_luc_pre = request.POST.get('sis_luc_pre')
+                prec.luc_fre_pre = request.POST.get('luc_fre_pre')
+                prec.luc_rev_pre = request.POST.get('luc_rev_pre')
+                prec.luc_par_pre = request.POST.get('luc_par_pre')
+                prec.vpan_pre = request.POST.get('vpan_pre')
+                prec.vlat_pre = request.POST.get('vlat_pre')
+                prec.vtra_pre = request.POST.get('vtra_pre')
+                prec.limp_pre = request.POST.get('limp_pre')
+                prec.elat_pre = request.POST.get('elat_pre')
+                prec.eret_pre = request.POST.get('eret_pre')
+                prec.pit_pre = request.POST.get('pit_pre')
+                prec.taco_pre = request.POST.get('taco_pre')
+                prec.odo_pre = request.POST.get('odo_pre')
+                prec.gas_pre = request.POST.get('gas_pre')
+                prec.tem_pre = request.POST.get('tem_pre')
+                prec.cin_pre = request.POST.get('cin_pre')
+                prec.alar_pre = request.POST.get('alar_pre')
+                prec.cha_pue_pre = request.POST.get('cha_pue_pre')
+                prec.pue_cie_pre = request.POST.get('pue_cie_pre')
+                prec.esc_acc_pre = request.POST.get('esc_acc_pre')
+                prec.pas_tec_pre = request.POST.get('pas_tec_pre')
+                prec.ven_eme_pre = request.POST.get('ven_eme_pre')
+                prec.alc_vol_pre = request.POST.get('alc_vol_pre')
+                prec.fre_pri_pre = request.POST.get('fre_pri_pre')
+                prec.fre_man_pre = request.POST.get('fre_man_pre')
+                prec.agu_lim_pre = request.POST.get('agu_lim_pre')
+                prec.agu_ref_pre = request.POST.get('agu_ref_pre')
+                prec.ace_mot_pre = request.POST.get('ace_mot_pre')
+                prec.liq_fre_pre = request.POST.get('liq_fre_pre')
+                prec.liq_bat_pre = request.POST.get('liq_bat_pre')
+                prec.ace_hid_pre = request.POST.get('ace_hid_pre')
+                prec.cor_pre = request.POST.get('cor_pre')
+                prec.man_pre = request.POST.get('man_pre')
+                prec.est_lla_pre = request.POST.get('est_lla_pre')
+                prec.pre_lla_pre = request.POST.get('pre_lla_pre')
+                prec.lab_lla_pre = request.POST.get('lab_lla_pre')
+                prec.rep_lla_pre = request.POST.get('rep_lla_pre')
+                prec.señ_eme_pre = request.POST.get('señ_eme_pre')
+                prec.tac_pre = request.POST.get('tac_pre')
+                prec.cha_pre = request.POST.get('cha_pre')
+                prec.gat_pre = request.POST.get('gat_pre')
+                prec.gua_pre = request.POST.get('gua_pre')
+                prec.cru_pre = request.POST.get('cru_pre')
+                prec.her_pre = request.POST.get('her_pre')
+                prec.bot_pre = request.POST.get('bot_pre')
+                prec.ext_pre = request.POST.get('ext_pre')
+                prec.obs_pre = request.POST.get('obs_pre')
+                prec.fec_pre = request.POST.get('fec_pre')
+                prec.pla_pre_id = request.POST.get('pla_pre')
+                prec.save()
+                messages.success(request, 'La asignación quedo registrada con el id {} sastifactoriamente'.format(prec.id_pre))
+                return redirect('listarprec')
+            except:
+                messages.error(request, 'La placa del vehiculo {} no existe'.format(prec.pla_pre_id))
+                return redirect('agregarprec')
+    else:
+        precs = Preoperacionalesm.objects.all()
+        datos = { 'prems' : precs}
+        return render(request, "revisiones/preoperacionales/carro/agregar.html", datos)
+    return render(request, "revisiones/preoperacionales/carro/agregar.html")
+
+def actualizarprec(request, idprec):
+    try:
+        if request.method == 'POST':
+            if request.POST.get('id_pre'):
+                asi_id_old = request.POST.get('id_pre')
+                asi_old = Preoperacionalesc()
+                asi_old = Preoperacionalesc.objects.get( id_pre=asi_id_old )
+                prec = Preoperacionalesc()
+                prec.id_pre = request.POST.get('id_pre')
+                prec.dir_del_pre = request.POST.get('dir_del_pre')
+                prec.dir_tra_pre = request.POST.get('dir_tra_pre')
+                prec.sis_luc_pre = request.POST.get('sis_luc_pre')
+                prec.luc_fre_pre = request.POST.get('luc_fre_pre')
+                prec.luc_rev_pre = request.POST.get('luc_rev_pre')
+                prec.luc_par_pre = request.POST.get('luc_par_pre')
+                prec.vpan_pre = request.POST.get('vpan_pre')
+                prec.vlat_pre = request.POST.get('vlat_pre')
+                prec.vtra_pre = request.POST.get('vtra_pre')
+                prec.limp_pre = request.POST.get('limp_pre')
+                prec.elat_pre = request.POST.get('elat_pre')
+                prec.eret_pre = request.POST.get('eret_pre')
+                prec.pit_pre = request.POST.get('pit_pre')
+                prec.taco_pre = request.POST.get('taco_pre')
+                prec.odo_pre = request.POST.get('odo_pre')
+                prec.gas_pre = request.POST.get('gas_pre')
+                prec.tem_pre = request.POST.get('tem_pre')
+                prec.cin_pre = request.POST.get('cin_pre')
+                prec.alar_pre = request.POST.get('alar_pre')
+                prec.cha_pue_pre = request.POST.get('cha_pue_pre')
+                prec.pue_cie_pre = request.POST.get('pue_cie_pre')
+                prec.esc_acc_pre = request.POST.get('esc_acc_pre')
+                prec.pas_tec_pre = request.POST.get('pas_tec_pre')
+                prec.ven_eme_pre = request.POST.get('ven_eme_pre')
+                prec.alc_vol_pre = request.POST.get('alc_vol_pre')
+                prec.fre_pri_pre = request.POST.get('fre_pri_pre')
+                prec.fre_man_pre = request.POST.get('fre_man_pre')
+                prec.agu_lim_pre = request.POST.get('agu_lim_pre')
+                prec.agu_ref_pre = request.POST.get('agu_ref_pre')
+                prec.ace_mot_pre = request.POST.get('ace_mot_pre')
+                prec.liq_fre_pre = request.POST.get('liq_fre_pre')
+                prec.liq_bat_pre = request.POST.get('liq_bat_pre')
+                prec.ace_hid_pre = request.POST.get('ace_hid_pre')
+                prec.cor_pre = request.POST.get('cor_pre')
+                prec.man_pre = request.POST.get('man_pre')
+                prec.est_lla_pre = request.POST.get('est_lla_pre')
+                prec.pre_lla_pre = request.POST.get('pre_lla_pre')
+                prec.lab_lla_pre = request.POST.get('lab_lla_pre')
+                prec.rep_lla_pre = request.POST.get('rep_lla_pre')
+                prec.señ_eme_pre = request.POST.get('señ_eme_pre')
+                prec.tac_pre = request.POST.get('tac_pre')
+                prec.cha_pre = request.POST.get('cha_pre')
+                prec.gat_pre = request.POST.get('gat_pre')
+                prec.gua_pre = request.POST.get('gua_pre')
+                prec.cru_pre = request.POST.get('cru_pre')
+                prec.her_pre = request.POST.get('her_pre')
+                prec.bot_pre = request.POST.get('bot_pre')
+                prec.ext_pre = request.POST.get('ext_pre')
+                prec.obs_pre = request.POST.get('obs_pre')
+                prec.fec_pre = asi_old.fec_pre
+                prec.pla_pre_id = request.POST.get('pla_pre')
+                prec.save()
+                messages.success(request, 'La revisión preoperacional con el id {} fue modificada'.format(prec.id_pre))
+                return redirect('listarprec')
+        else:
+            prec = Preoperacionalesc.objects.get( id_pre=idprec )
+            precs = Preoperacionalesc.objects.all()
+            datos = {'precs' : precs, 'prec' : prec }
+            return render(request,"revisiones/preoperacionales/carro/actualizar.html",datos)
+    except Preoperacionalesc.DoesNotExist:
+        prec = None
+        precs = Preoperacionalesc.objects.all()
+        datos = {'precs' : precs, 'prec' : prec }
+        return render(request,"revisiones/preoperacionales/carro/actualizar.html",datos)
+
+def eliminarprec(request, idprec):   
+    try:
+            if request.method=='POST':
+                if request.POST.get('id_pre'):
+                    id_a_borrar= request.POST.get('id_pre')
+                    
+                    tupla=Preoperacionalesc.objects.get(id_pre = id_a_borrar)
+                    messages.warning(request, 'La revisión preoperacional con el id {} fue eliminada.'.format(tupla.id_pre))
+                    tupla.delete()
+                    
+                    return redirect('listarprec')
+            else:
+                prec = Preoperacionalesc.objects.get( id_pre = idprec )
+                precs = Preoperacionalesc.objects.all()
+                datos = {'precs' : precs, 'prec' : prec }
+                return render(request,"revisiones/preoperacionales/carro/eliminar.html",datos)
+    except Preoperacionalesm.DoesNotExist:
+        prec = None
+        precs = Preoperacionalesc.objects.all()
+        datos = {'precs' : precs, 'prec' : prec }
+        return render(request,"revisiones/preoperacionales/carro/eliminar.html",datos)
