@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica, VehiculosAsignados, Preoperacionalesm, Preoperacionalesc
+from .models import Usuarios, Dependencias, Vehiculos, Soat, Tecnicomecanica, VehiculosAsignados, Preoperacionalesm, Preoperacionalesc, Mantenimiento
 from django.db.models import Q
 from datetime import date
 from django.contrib import messages
@@ -55,6 +55,7 @@ def agregar(request):
                 user.dir_per = request.POST.get('dir_per')
                 user.cat_per = request.POST.get('cat_per')
                 user.vig_per = request.POST.get('vig_per')
+                user.pase_ade_per = request.POST.get('pase_ade_per')
                 user.dep_per_id = request.POST.get('dep_per')
                 user.save()
                 messages.success(request, 'El usuario {} fue agregado'.format(user.nom_per+" "+user.ape_per))
@@ -329,6 +330,7 @@ def listarsoa(request):
             Q(id_soa__icontains=busqueda) |
             Q(nom_emp_soa__icontains=busqueda) |
             Q(fec_exp_soa__icontains=busqueda) |
+            Q(fec_vig_soa__icontains=busqueda) |
             Q(fec_ven_soa__icontains=busqueda) 
             )
             datos = {'soats': res_busqueda}
@@ -351,6 +353,7 @@ def agregarsoa(request):
                 soat.id_soa = request.POST.get('id_soa')
                 soat.nom_emp_soa = request.POST.get('nom_emp_soa')
                 soat.fec_exp_soa = request.POST.get('fec_exp_soa')
+                soat.fec_vig_soa = request.POST.get('fec_vig_soa')
                 soat.fec_ven_soa = request.POST.get('fec_ven_soa')
                 soat.save()
                 messages.success(request, 'El SOAT de {} fue agregado'.format(soat.nom_emp_soa))
@@ -373,6 +376,7 @@ def actualizarsoa(request, idSoat):
                     soat.id_soa = request.POST.get('id')
                     soat.nom_emp_soa = request.POST.get('nom_emp_soa')
                     soat.fec_exp_soa = request.POST.get('fec_exp_soa')
+                    soat.fec_vig_soa = request.POST.get('fec_vig_soa')
                     soat.fec_ven_soa = request.POST.get('fec_ven_soa')
                     soat.save()
                     messages.success(request, 'El SOAT de {} fue modificado'.format(soat.nom_emp_soa))
@@ -383,6 +387,7 @@ def actualizarsoa(request, idSoat):
         else:
             soat = Soat.objects.get( id_soa=idSoat )
             soat.fec_exp_soa = date.strftime(soat.fec_exp_soa, "%Y-%m-%d")
+            soat.fec_vig_soa = date.strftime(soat.fec_vig_soa, "%Y-%m-%d")
             soat.fec_ven_soa = date.strftime(soat.fec_ven_soa, "%Y-%m-%d")
             soats = Soat.objects.all()
             datos = {'soats' : soats, 'soat' : soat }
@@ -827,10 +832,9 @@ def agregarprec(request):
                 messages.error(request, 'La placa del vehiculo {} no existe'.format(prec.pla_pre_id))
                 return redirect('agregarprec')
     else:
-        precs = Preoperacionalesm.objects.all()
-        datos = { 'prems' : precs}
+        prems = Preoperacionalesm.objects.all()
+        datos = { 'prems' : prems}
         return render(request, "revisiones/preoperacionales/carro/agregar.html", datos)
-    return render(request, "revisiones/preoperacionales/carro/agregar.html")
 
 def actualizarprec(request, idprec):
     try:
@@ -927,3 +931,99 @@ def eliminarprec(request, idprec):
         precs = Preoperacionalesc.objects.all()
         datos = {'precs' : precs, 'prec' : prec }
         return render(request,"revisiones/preoperacionales/carro/eliminar.html",datos)
+
+def listarman(request):
+
+    if request.method == 'POST':
+        busqueda = request.POST.get('keyword')
+        lista = Mantenimiento.objects.all()
+
+        if busqueda is not None:
+            res_busqueda = lista.filter(
+            Q(id_man__icontains=busqueda) |
+            Q(id_veh=busqueda) |
+            Q(fec_man__icontains=busqueda) |
+            Q(per_man__icontains=busqueda) |
+            Q(tipo_man__icontains=busqueda)
+            )
+            messages.success(request, 'Resultados encontrados por: {}'.format(busqueda))
+            datos = {'mans': res_busqueda}
+            return render(request, "revisiones/mantenimiento/listar.html", datos)
+        else:
+            datos = { 'mans' : lista }
+            return render(request, "revisiones/mantenimiento/listar.html", datos)
+    else:
+        mans = Mantenimiento.objects.order_by('-id_man')[:10]
+        datos = { 'mans' : mans}
+        return render(request, "revisiones/mantenimiento/listar.html", datos)
+
+def agregarman(request):
+    if request.method == 'POST':
+        if request.POST.get('id_veh'):
+            try:
+                man = Mantenimiento()
+                man.fec_man = request.POST.get('fec_man')
+                man.tipo_man = request.POST.get('tipo_man')
+                man.des_obs_man = request.POST.get('des_obs_man')
+                man.per_man = request.POST.get('per_man')
+                man.rec_man = request.POST.get('rec_man')
+                man.id_veh_id = request.POST.get('id_veh')
+                man.save()
+                messages.success(request, 'El mantenimiendo se registro con el id {} sastifactoriamente'.format(man.id_man))
+                return redirect('listarman')
+            except:
+                messages.error(request, 'La placa del vehiculo {} no existe'.format(man.id_veh_id))
+                return redirect('agregarman')
+    else:
+        mans = Mantenimiento.objects.all()
+        datos = { 'mans' : mans}
+        return render(request, "revisiones/mantenimiento/agregar.html", datos)
+
+def actualizarman(request, idman):
+    try:
+        if request.method == 'POST':
+            if request.POST.get('id_man'):
+                man = Mantenimiento()
+                man.id_man = request.POST.get('id_man')
+                man.fec_man = request.POST.get('fec_man')
+                man.tipo_man = request.POST.get('tipo_man')
+                man.des_obs_man = request.POST.get('des_obs_man')
+                man.per_man = request.POST.get('per_man')
+                man.rec_man = request.POST.get('rec_man')
+                man.id_veh_id = request.POST.get('id_veh')
+                man.save()
+                messages.success(request, 'El mantenimiento con el id {} fue modificado'.format(man.id_man))
+                return redirect('listarman')
+        else:
+            man = Mantenimiento.objects.get( id_man=idman )
+            man.fec_man = date.strftime(man.fec_man, "%Y-%m-%d")
+            mans = Mantenimiento.objects.all()
+            datos = {'mans' : mans, 'man' : man }
+            return render(request,"revisiones/mantenimiento/actualizar.html",datos)
+    except Mantenimiento.DoesNotExist:
+        man = None
+        mans = Mantenimiento.objects.all()
+        datos = {'mans' : mans, 'man' : man }
+        return render(request,"revisiones/mantenimiento/actualizar.html",datos)
+
+def eliminarman(request, idman):   
+    try:
+            if request.method=='POST':
+                if request.POST.get('id_man'):
+                    id_a_borrar= request.POST.get('id_man')
+                    
+                    tupla=Mantenimiento.objects.get(id_man = id_a_borrar)
+                    messages.warning(request, 'La revisión preoperacional con el id {} fue eliminada.'.format(tupla.id_man))
+                    tupla.delete()
+                    
+                    return redirect('listarman')
+            else:
+                man = Mantenimiento.objects.get( id_man = idman )
+                mans = Mantenimiento.objects.all()
+                datos = {'mans' : mans, 'man' : man }
+                return render(request,"revisiones/mantenimiento/eliminar.html",datos)
+    except Mantenimiento.DoesNotExist:
+        man = None
+        mans = Mantenimiento.objects.all()
+        datos = {'mans' : mans, 'man' : man }
+        return render(request,"revisiones/mantenimiento/eliminar.html",datos)

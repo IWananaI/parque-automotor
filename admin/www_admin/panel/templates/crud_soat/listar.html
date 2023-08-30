@@ -32,7 +32,8 @@ Lista de seguros SOAT
           <th scope="col">ID</th>
           <th scope="col">Nombre de la empresa</th>
           <th scope="col">Fecha de expedición</th>
-          <th scope="col">Fecha de Vencimiento</th>
+          <th scope="col">Vigencia desde</th>
+          <th scope="col">hasta</th>
           <th scope="col">Acción</th>
 
         </tr>
@@ -44,6 +45,7 @@ Lista de seguros SOAT
             <th scope="row">{{ u.id_soa }}</th>
             <td>{{ u.nom_emp_soa }}</td>
             <td>{{ u.fec_exp_soa }}</td>
+            <td>{{ u.fec_vig_soa }}</td>
             <td>{{ u.fec_ven_soa }}</td>
             <td>
               <button class="btn btn-warning" onclick="window.location.href='actualizarsoa/{{ u.id_soa }}'"><i class="fa fa-refresh"></i></i></button>

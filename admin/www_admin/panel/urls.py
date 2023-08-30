@@ -3,6 +3,8 @@ from django.urls import path
 
 from django import views
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -38,4 +40,8 @@ urlpatterns = [
     path('agregarprec', views.agregarprec, name="agregarprec"),
     path('actualizarprec/<int:idprec>', views.actualizarprec, name="actualizarprec"),
     path('eliminarprec/<int:idprec>', views.eliminarprec, name="eliminarprec"),
-]
+    path('listarman', views.listarman, name="listarman"),
+    path('agregarman', views.agregarman, name="agregarman"),
+    path('actualizarman/<int:idman>', views.actualizarman, name="actualizarman"),
+    path('eliminarman/<int:idman>', views.eliminarman, name="eliminarman"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

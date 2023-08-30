@@ -17,6 +17,8 @@ class Usuarios(models.Model):
     dir_per = models.CharField(max_length=30,null=False)
     cat_per = models.CharField(max_length=30,null=False)
     vig_per = models.DateField(null=True)
+    pase_ade_per = models.ImageField(upload_to="imagenes", null=True)
+    pase_atr_per = models.ImageField(upload_to="imagenes", null=True)
     dep_per = models.ForeignKey(Dependencias, on_delete=models.CASCADE)
     class Meta:
         db_table = 'usuarios'
@@ -26,6 +28,7 @@ class Soat(models.Model):
     id_soa = models.AutoField(primary_key=True)
     nom_emp_soa = models.CharField(max_length=50, null=True)
     fec_exp_soa = models.DateField(null=True)
+    fec_vig_soa = models.DateField(null=True)
     fec_ven_soa = models.DateField(null=True)
     class Meta:
         db_table = 'soat'
@@ -170,3 +173,16 @@ class Preoperacionalesc(models.Model):
     
     class Meta:
         db_table = 'preoperacionalesc'
+
+class Mantenimiento(models.Model):
+    id_man = models.AutoField(primary_key=True)
+    fec_man = models.DateField(null=True)
+    tipo_man = models.CharField(max_length=20,null=False)
+    des_obs_man = models.CharField(max_length=500)
+    per_man = models.CharField(max_length=50,null=False)
+    rec_man = models.CharField(max_length=200)
+    id_veh = models.ForeignKey(Vehiculos,
+                               blank=True,
+                               on_delete=models.CASCADE)
+    class Meta:
+        db_table = 'mantenimiento'
